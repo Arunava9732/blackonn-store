@@ -1,0 +1,74 @@
+﻿[
+  {
+    "id": "prod-001",
+    "name": "Over Sized T-Shirt",
+    "price": 1499,
+    "color": "Black",
+    "size": "All",
+    "stock": 100,
+    "position": 1,
+    "image": "assets/img/new1.png",
+    "thumbImages": ["assets/img/new1.png", "assets/img/home1.png"],
+    "createdAt": "2025-12-08T15:03:43.770Z"
+  },
+  {
+    "id": "prod-002",
+    "name": "Slim Fit T-Shirt",
+    "price": 599,
+    "color": "Red and Blue",
+    "size": "All",
+    "stock": 150,
+    "position": 2,
+    "image": "assets/img/new2.png",
+    "thumbImages": ["assets/img/new2.png", "assets/img/home2.png"],
+    "createdAt": "2025-12-08T15:03:43.771Z"
+  },
+  {
+    "id": "prod-003",
+    "name": "CAP",
+    "price": 399,
+    "color": "Black",
+    "size": "All",
+    "stock": 200,
+    "position": 3,
+    "image": "assets/img/new3.png",
+    "thumbImages": ["assets/img/new3.png", "assets/img/collection1.png"],
+    "createdAt": "2025-12-08T15:03:43.771Z"
+  },
+  {
+    "id": "prod-004",
+    "name": "BAG",
+    "price": 1799,
+    "color": "Black",
+    "size": "One Size",
+    "stock": 75,
+    "position": 4,
+    "image": "assets/img/new4.png",
+    "thumbImages": ["assets/img/new4.png", "assets/img/collection2.png"],
+    "createdAt": "2025-12-08T15:03:43.772Z"
+  },
+  {
+    "id": "prod-005",
+    "name": "Hoodie",
+    "price": 1999,
+    "color": "Black",
+    "size": "All",
+    "stock": 80,
+    "position": 5,
+    "image": "assets/img/new5.png",
+    "thumbImages": ["assets/img/new5.png", "assets/img/home3.png"],
+    "createdAt": "2025-12-08T15:03:43.772Z"
+  },
+  {
+    "id": "prod-006",
+    "name": "Pants",
+    "price": 1299,
+    "color": "All",
+    "size": "All",
+    "stock": 120,
+    "position": 6,
+    "image": "assets/img/new6.png",
+    "thumbImages": ["assets/img/new6.png", "assets/img/product1.png"],
+    "createdAt": "2025-12-08T15:03:43.772Z"
+  }
+]

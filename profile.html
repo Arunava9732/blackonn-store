@@ -1,0 +1,3042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - BLACKONN</title>
+    <style>
+        html { background: #eef3f8; }
+        body { background: #eef3f8; }
+        .nav {
+            background: #eef3f8 !important;
+        }
+        .cart-count {
+            display: none !important;
+        }
+        .cart-count.show {
+            display: flex !important;
+        }
+        .logo img {
+            width: 175px;
+            height: 50px;
+            margin-bottom: 15px;
+        }
+    </style>
+    <link rel="shortcut icon" href="assets/img/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.min.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <style>
+        .profile-container {
+            min-height: 100vh;
+            padding: 100px 5% 60px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            padding: 40px;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.08);
+            margin-bottom: 40px;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: #666;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-avatar .avatar-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: 50%;
+        }
+
+        .profile-avatar:hover .avatar-overlay {
+            opacity: 1;
+        }
+
+        .profile-avatar .avatar-overlay i {
+            font-size: 28px;
+            color: #fff;
+        }
+
+        .profile-avatar input[type="file"] {
+            display: none;
+        }
+
+        .profile-info h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #000;
+        }
+
+        .profile-info p {
+            color: #666;
+            font-size: 15px;
+            margin-bottom: 5px;
+        }
+
+        .profile-info .member-since {
+            font-size: 13px;
+            color: #999;
+        }
+
+        .profile-actions {
+            margin-left: auto;
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-edit {
+            padding: 12px 25px;
+            background: #000;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn-edit:hover {
+            background: #333;
+            transform: translateY(-2px);
+        }
+
+        .btn-logout {
+            padding: 12px 25px;
+            background: #fff;
+            color: #ff4444;
+            border: 2px solid #ff4444;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-logout:hover {
+            background: #ff4444;
+            color: #fff;
+        }
+
+        /* Logout Popup */
+        .logout-popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .logout-popup-overlay.show {
+            display: flex;
+        }
+
+        .logout-popup {
+            background: #fff;
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: popupSlideIn 0.3s ease;
+        }
+
+        @keyframes popupSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .logout-popup-icon {
+            width: 70px;
+            height: 70px;
+            background: #fff3f3;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .logout-popup-icon i {
+            font-size: 32px;
+            color: #ff4444;
+        }
+
+        .logout-popup h3 {
+            font-size: 22px;
+            color: #000;
+            margin-bottom: 10px;
+        }
+
+        .logout-popup p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        .logout-popup-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .logout-popup-buttons button {
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-cancel {
+            background: #f5f5f5;
+            color: #333;
+            border: none;
+        }
+
+        .btn-cancel:hover {
+            background: #e0e0e0;
+        }
+
+        .btn-confirm-logout {
+            background: #ff4444;
+            color: #fff;
+            border: none;
+        }
+
+        .btn-confirm-logout:hover {
+            background: #cc0000;
+        }
+
+        /* Success Popup */
+        .success-popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .success-popup-overlay.show {
+            display: flex;
+        }
+
+        .success-popup {
+            background: #fff;
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: popupSlideIn 0.3s ease;
+        }
+
+        .success-popup-icon {
+            width: 70px;
+            height: 70px;
+            background: #e8f5e9;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .success-popup-icon i {
+            font-size: 32px;
+            color: #4caf50;
+        }
+
+        .success-popup h3 {
+            font-size: 22px;
+            color: #000;
+            margin-bottom: 10px;
+        }
+
+        .success-popup p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        .btn-success-ok {
+            padding: 12px 40px;
+            background: #4caf50;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-success-ok:hover {
+            background: #388e3c;
+        }
+
+        /* Address Modal */
+        .address-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .address-modal-overlay.show {
+            display: flex;
+        }
+
+        .address-modal {
+            background: #fff;
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: popupSlideIn 0.3s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .address-modal h3 {
+            font-size: 20px;
+            color: #000;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .address-modal .form-group {
+            margin-bottom: 15px;
+        }
+
+        .address-modal .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 6px;
+        }
+
+        .address-modal .form-group input,
+        .address-modal .form-group select,
+        .address-modal .form-group textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .address-modal .form-group input:focus,
+        .address-modal .form-group select:focus,
+        .address-modal .form-group textarea:focus {
+            outline: none;
+            border-color: #000;
+        }
+
+        .address-modal .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .address-modal-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .address-modal-buttons button {
+            flex: 1;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-save-address {
+            background: #000;
+            color: #fff;
+            border: none;
+        }
+
+        .btn-save-address:hover {
+            background: #333;
+        }
+
+        /* Delete Confirmation Modal */
+        .delete-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .delete-modal-overlay.show {
+            display: flex;
+        }
+
+        .delete-modal {
+            background: #fff;
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: popupSlideIn 0.3s ease;
+        }
+
+        .delete-modal-icon {
+            width: 70px;
+            height: 70px;
+            background: #fff3f3;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .delete-modal-icon i {
+            font-size: 32px;
+            color: #ff4444;
+        }
+
+        .delete-modal h3 {
+            font-size: 20px;
+            color: #000;
+            margin-bottom: 10px;
+        }
+
+        .delete-modal p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        .delete-modal-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .delete-modal-buttons button {
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-confirm-delete {
+            background: #ff4444;
+            color: #fff;
+            border: none;
+        }
+
+        .btn-confirm-delete:hover {
+            background: #cc0000;
+        }
+
+        /* Return Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal.show .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 25px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 600;
+            color: #000;
+        }
+
+        .modal-close {
+            font-size: 24px;
+            color: #666;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: #000;
+        }
+
+        .modal-body {
+            padding: 25px;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 20px 25px;
+            border-top: 1px solid #eee;
+        }
+
+        .return-order-info p {
+            margin: 8px 0;
+            font-size: 14px;
+        }
+
+        .return-items {
+            margin: 15px 0;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .return-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+
+        .return-item:last-child {
+            border-bottom: none;
+        }
+
+        .return-item label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            width: 100%;
+        }
+
+        .return-item-info {
+            display: flex;
+            align-items: center;
+            flex: 1;
+        }
+
+        .return-reason, .return-comments {
+            margin-top: 20px;
+        }
+
+        .return-reason label, .return-comments label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #000;
+        }
+
+        .return-reason select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .return-reason select:focus {
+            border-color: #000;
+            outline: none;
+        }
+
+        .return-comments textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            resize: vertical;
+        }
+
+        .return-comments textarea:focus {
+            border-color: #000;
+            outline: none;
+        }
+
+        .btn-cancel, .btn-submit {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-cancel {
+            background: #fff;
+            color: #666;
+            border: 1px solid #ddd;
+        }
+
+        .btn-cancel:hover {
+            background: #f5f5f5;
+        }
+
+        .btn-submit {
+            background: #000;
+            color: #fff;
+            border: none;
+        }
+
+        .btn-submit:hover {
+            background: #333;
+        }
+
+        .address-card {
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .address-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .address-label {
+            font-weight: 600;
+            font-size: 16px;
+            color: #000;
+            margin-bottom: 8px;
+        }
+
+        .address-details {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .address-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-edit-address {
+            padding: 8px 16px;
+            background: #fff;
+            color: #000;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-edit-address:hover {
+            border-color: #000;
+        }
+
+        .btn-delete-address {
+            padding: 8px 16px;
+            background: #fff;
+            color: #ff4444;
+            border: 1px solid #ff4444;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-delete-address:hover {
+            background: #ff4444;
+            color: #fff;
+        }
+
+        .profile-content {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 30px;
+        }
+
+        .profile-sidebar {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.08);
+            padding: 20px;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 18px;
+            color: #333;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-menu a:hover {
+            background: #f5f5f5;
+            color: #000;
+        }
+
+        .sidebar-menu a.active {
+            background: #000;
+            color: #fff;
+        }
+
+        .sidebar-menu a i {
+            font-size: 20px;
+        }
+
+        .profile-main {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: #000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            font-size: 24px;
+        }
+
+        /* Profile Section */
+        .profile-section {
+            display: none;
+        }
+
+        .profile-section.active {
+            display: block;
+        }
+
+        .profile-form {
+            display: grid;
+            gap: 20px;
+            max-width: 600px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-group input {
+            padding: 14px 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #000;
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-group input:disabled {
+            background: #f5f5f5;
+            color: #666;
+        }
+
+        .btn-save {
+            padding: 14px 30px;
+            background: #000;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: fit-content;
+            margin-top: 10px;
+        }
+
+        .btn-save:hover {
+            background: #333;
+            transform: translateY(-2px);
+        }
+
+        /* Orders Section */
+        .orders-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .order-card {
+            border: 1px solid #eee;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: #f9f9f9;
+            border-bottom: 1px solid #eee;
+        }
+
+        .order-id {
+            font-weight: 600;
+            font-size: 16px;
+            color: #000;
+        }
+
+        .order-date {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .order-status {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .order-status.delivered {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .order-status.processing {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .order-status.shipped {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .order-status.cancelled {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .order-items {
+            padding: 20px;
+        }
+
+        .order-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .order-item-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .order-item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .order-item-image i {
+            font-size: 32px;
+            color: #ccc;
+        }
+
+        .order-item-details {
+            flex: 1;
+        }
+
+        .order-item-name {
+            font-weight: 500;
+            font-size: 15px;
+            margin-bottom: 5px;
+            color: #000;
+        }
+
+        .order-item-meta {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .order-item-price {
+            font-weight: 600;
+            font-size: 16px;
+            color: #000;
+        }
+
+        .order-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: #f9f9f9;
+            border-top: 1px solid #eee;
+        }
+
+        .order-total {
+            font-size: 18px;
+            font-weight: 600;
+            color: #000;
+        }
+
+        .order-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-track, .btn-reorder, .btn-return {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn-track {
+            background: #000;
+            color: #fff;
+            border: none;
+        }
+
+        .btn-track:hover {
+            background: #333;
+        }
+
+        .btn-reorder {
+            background: #fff;
+            color: #000;
+            border: 1px solid #ddd;
+        }
+
+        .btn-reorder:hover {
+            border-color: #000;
+        }
+
+        .btn-return {
+            background: #fff;
+            color: #dc2626;
+            border: 1px solid #dc2626;
+        }
+
+        .btn-return:hover {
+            background: #dc2626;
+            color: #fff;
+        }
+
+        /* Tracking Section */
+        .tracking-search {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            max-width: 500px;
+        }
+
+        .tracking-search input {
+            flex: 1;
+            padding: 14px 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        .tracking-search input:focus {
+            outline: none;
+            border-color: #000;
+        }
+
+        .tracking-search button {
+            padding: 14px 25px;
+            background: #000;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tracking-search button:hover {
+            background: #333;
+        }
+
+        .tracking-result {
+            border: 1px solid #eee;
+            border-radius: 12px;
+            padding: 30px;
+        }
+
+        .tracking-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .tracking-order-info h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .tracking-order-info p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .tracking-timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .tracking-timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #eee;
+        }
+
+        .tracking-step {
+            position: relative;
+            padding-bottom: 30px;
+        }
+
+        .tracking-step:last-child {
+            padding-bottom: 0;
+        }
+
+        .tracking-step::before {
+            content: '';
+            position: absolute;
+            left: -24px;
+            top: 4px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #ddd;
+            border: 3px solid #fff;
+            box-shadow: 0 0 0 2px #ddd;
+        }
+
+        .tracking-step.completed::before {
+            background: #4caf50;
+            box-shadow: 0 0 0 2px #4caf50;
+        }
+
+        .tracking-step.current::before {
+            background: #000;
+            box-shadow: 0 0 0 2px #000;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 2px #000; }
+            50% { box-shadow: 0 0 0 6px rgba(0, 0, 0, 0.2); }
+            100% { box-shadow: 0 0 0 2px #000; }
+        }
+
+        .tracking-step-title {
+            font-weight: 600;
+            font-size: 15px;
+            margin-bottom: 5px;
+            color: #000;
+        }
+
+        .tracking-step-desc {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .tracking-step-time {
+            font-size: 13px;
+            color: #999;
+        }
+
+        .tracking-details {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .tracking-details h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #000;
+        }
+
+        .tracking-items {
+            margin-bottom: 15px;
+        }
+
+        .tracking-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+
+        .tracking-item:last-child {
+            border-bottom: none;
+        }
+
+        .tracking-total {
+            text-align: right;
+            font-size: 16px;
+            color: #000;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .empty-state i {
+            font-size: 64px;
+            color: #ddd;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .empty-state h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #000;
+        }
+
+        .empty-state p {
+            color: #666;
+            margin-bottom: 25px;
+            max-width: 300px;
+            line-height: 1.5;
+        }
+
+        .empty-state a {
+            display: inline-block;
+            padding: 14px 30px;
+            background: #000;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .empty-state a:hover {
+            background: #333;
+            transform: translateY(-2px);
+        }
+
+        /* Wishlist Items */
+        .wishlist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .wishlist-item {
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .wishlist-item:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transform: translateY(-3px);
+        }
+
+        .wishlist-item-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: #f5f5f5;
+        }
+
+        .wishlist-item-info {
+            padding: 15px;
+        }
+
+        .wishlist-item-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #000;
+            margin-bottom: 5px;
+        }
+
+        .wishlist-item-price {
+            font-size: 18px;
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 12px;
+        }
+
+        .wishlist-item-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .wishlist-item-actions button {
+            flex: 1;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-add-cart {
+            background: #000;
+            color: #fff;
+            border: none;
+        }
+
+        .btn-add-cart:hover {
+            background: #333;
+        }
+
+        .btn-remove-wishlist {
+            background: #fff;
+            color: #ff4444;
+            border: 1px solid #ff4444;
+        }
+
+        .btn-remove-wishlist:hover {
+            background: #ff4444;
+            color: #fff;
+        }
+
+        /* Raised Queries Styles */
+        .query-card {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .query-card:hover {
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            border-color: #d1d5db;
+        }
+
+        .query-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .query-subject {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1f2937;
+            margin: 0;
+        }
+
+        .query-date {
+            font-size: 12px;
+            color: #9ca3af;
+        }
+
+        .query-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .query-status.replied {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .query-status.pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .query-message {
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 12px 0;
+            padding: 12px;
+            background: #f9fafb;
+            border-left: 3px solid #3b82f6;
+            border-radius: 4px;
+        }
+
+        .query-replies {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .reply-item {
+            background: #f0fdf4;
+            border-left: 3px solid #22c55e;
+            padding: 12px;
+            margin-bottom: 12px;
+            border-radius: 4px;
+        }
+
+        .reply-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+
+        .reply-header strong {
+            color: #059669;
+        }
+
+        .reply-header small {
+            color: #9ca3af;
+        }
+
+        .reply-content {
+            color: #1f2937;
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .no-replies {
+            color: #9ca3af;
+            font-size: 13px;
+            font-style: italic;
+            padding: 8px;
+        }
+
+        .queries-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* Notification Badge Styles */
+        .sidebar-menu a {
+            position: relative;
+        }
+        .query-notification-dot {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #dc2626;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            border: 2px solid white;
+            box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+            animation: pulse-badge 2s infinite;
+        }
+        @keyframes pulse-badge {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+            }
+            50% {
+                transform: scale(1.1);
+                box-shadow: 0 2px 12px rgba(220, 38, 38, 0.5);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .profile-content {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-sidebar {
+                position: static;
+            }
+
+            .sidebar-menu {
+                display: flex;
+                overflow-x: auto;
+                gap: 10px;
+                padding-bottom: 10px;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: thin;
+                scroll-behavior: smooth;
+            }
+            
+            .sidebar-menu::-webkit-scrollbar {
+                height: 4px;
+            }
+            
+            .sidebar-menu::-webkit-scrollbar-thumb {
+                background: #d1d5db;
+                border-radius: 4px;
+            }
+
+            .sidebar-menu li {
+                margin-bottom: 0;
+                flex-shrink: 0;
+            }
+
+            .sidebar-menu a {
+                white-space: nowrap;
+                padding: 12px 16px;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .profile-actions {
+                margin-left: 0;
+                margin-top: 20px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .profile-container {
+                padding: 90px 4% 40px;
+            }
+
+            .profile-header {
+                padding: 25px;
+            }
+
+            .profile-avatar {
+                width: 80px;
+                height: 80px;
+                font-size: 32px;
+            }
+
+            .profile-info h1 {
+                font-size: 22px;
+            }
+
+            .order-header {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+
+            .order-footer {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .order-actions {
+                width: 100%;
+            }
+
+            .order-actions button, .order-actions a {
+                flex: 1;
+                text-align: center;
+            }
+
+            .tracking-search {
+                flex-direction: column;
+            }
+            
+            .order-item {
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+            
+            .order-item-image {
+                width: 90px;
+                height: 90px;
+                border-radius: 10px;
+                flex-shrink: 0;
+            }
+            
+            .order-item-image img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+            
+            .order-item-details {
+                flex: 1;
+                min-width: calc(100% - 110px);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Premium Glass Hamburger Navbar -->
+    <header class="nav">
+        <div class="nav-container">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="BLACKONN 004_page-0001.png" alt="BLACKONN Logo" title="BLACKONN">
+                </a>
+            </div>
+
+            <div class="nav-right">
+                <div class="nav-icons">
+                    <a href="login.html" class="nav-icon login-icon" id="loginIcon" title="Login" style="display: none;">
+                        <i class="ri-user-line"></i>
+                    </a>
+                    <a href="profile.html" class="nav-user" id="navUser">
+                        <i class="ri-user-line" id="navUserIcon"></i>
+                        <span class="user-name" id="navUserName"></span>
+                    </a>
+                    <a href="cart.html" class="nav-icon cart-icon" id="cartIcon" title="Shopping Cart">
+                        <i class="ri-shopping-cart-line"></i>
+                        <span class="cart-count" id="cartCount">0</span>
+                    </a>
+                </div>
+                <button class="hamburger" id="menuBtn" aria-label="Open menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Fullscreen Menu -->
+    <div class="fullscreen-menu" id="fullMenu">
+        <button class="close-menu" id="closeMenu">×</button>
+        <ul>
+            <li><a href="index.html#shop" title="Shop"><i class="ri-shopping-bag-line"></i></a></li>
+            <li><a href="index.html#about" title="About"><i class="ri-information-line"></i></a></li>
+            <li><a href="index.html#contact" title="Contact"><i class="ri-mail-line"></i></a></li>
+            <li><a href="cart.html" title="Cart"><i class="ri-shopping-cart-line"></i></a></li>
+        </ul>
+    </div>
+
+    <script>
+        // Menu Toggle
+        const menuBtn = document.getElementById('menuBtn');
+        const fullMenu = document.getElementById('fullMenu');
+        const closeMenu = document.getElementById('closeMenu');
+
+        menuBtn.addEventListener('click', () => {
+            fullMenu.style.display = 'flex';
+            fullMenu.classList.remove('closing');
+            fullMenu.classList.add('open');
+            menuBtn.classList.add('open');
+        });
+
+        closeMenu.addEventListener('click', () => {
+            fullMenu.classList.remove('open');
+            fullMenu.classList.add('closing');
+            menuBtn.classList.remove('open');
+            setTimeout(() => {
+                fullMenu.style.display = 'none';
+            }, 500);
+        });
+
+        const menuLinks = document.querySelectorAll('.fullscreen-menu a');
+        menuLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                fullMenu.classList.remove('open');
+                fullMenu.classList.add('closing');
+                menuBtn.classList.remove('open');
+                setTimeout(() => {
+                    fullMenu.style.display = 'none';
+                }, 500);
+            });
+        });
+
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('blackonn_cart')) || [];
+            const cartCount = document.getElementById('cartCount');
+            const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
+            if (cartCount) {
+                cartCount.textContent = totalQuantity;
+                if (totalQuantity > 0) {
+                    cartCount.classList.add('show');
+                } else {
+                    cartCount.classList.remove('show');
+                }
+            }
+        }
+
+        // Update navbar with user name
+        function updateNavUser() {
+            const user = JSON.parse(localStorage.getItem('blackonn_user'));
+            const navUserName = document.getElementById('navUserName');
+            const navUserIcon = document.getElementById('navUserIcon');
+            const loginIcon = document.getElementById('loginIcon');
+            const navUser = document.getElementById('navUser');
+            
+            if (user && user.name) {
+                // User is logged in - show user info, hide login icon
+                const firstName = user.name.split(' ')[0];
+                if (navUserName) navUserName.textContent = firstName;
+                if (loginIcon) loginIcon.style.display = 'none';
+                if (navUser) navUser.style.display = 'flex';
+                
+                if (user.avatar && navUserIcon) {
+                    navUserIcon.outerHTML = '<img src="' + user.avatar + '" alt="" class="user-avatar">';
+                }
+            } else {
+                // User is not logged in - show login icon, hide user info
+                if (loginIcon) loginIcon.style.display = 'flex';
+                if (navUser) navUser.style.display = 'none';
+            }
+        }
+
+        // Check if user is logged in and validate session
+        function checkUserLogin() {
+            const user = JSON.parse(localStorage.getItem('blackonn_user'));
+            const adminAuth = JSON.parse(localStorage.getItem('blackonn_admin_auth') || 'null');
+            
+            // Check if admin is logged in
+            if (adminAuth && adminAuth.loggedIn) {
+                // Redirect admin to admin panel
+                window.location.href = 'admin.html';
+                return;
+            }
+            
+            // Check if regular user is logged in
+            if (!user || !user.loggedIn) {
+                // Redirect to login if not authenticated
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Validate session token if present
+            if (user.sessionToken) {
+                const storedUsers = JSON.parse(localStorage.getItem('blackonn_users') || '[]');
+                const storedUser = storedUsers.find(u => u.id === user.id);
+                
+                if (!storedUser || storedUser.sessionToken !== user.sessionToken) {
+                    // Invalid session, logout
+                    localStorage.removeItem('blackonn_user');
+                    window.location.href = 'login.html';
+                    return;
+                }
+                
+                // Check session expiry (24 hours)
+                const loginTime = new Date(user.loginTime || user.lastLogin);
+                const now = new Date();
+                const hoursDiff = (now - loginTime) / (1000 * 60 * 60);
+                
+                if (hoursDiff > 24) {
+                    // Session expired, logout
+                    localStorage.removeItem('blackonn_user');
+                    alert('Your session has expired. Please login again.');
+                    window.location.href = 'login.html';
+                    return;
+                }
+            }
+            
+            // Update last activity
+            user.lastActivity = new Date().toISOString();
+            localStorage.setItem('blackonn_user', JSON.stringify(user));
+        }
+        
+        checkUserLogin();
+        updateNavUser();
+    </script>
+
+    <main class="profile-container">
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="profile-avatar" onclick="document.getElementById('avatarInput').click()" title="Click to upload photo">
+                <img src="" alt="Profile" id="avatarImage" style="display: none;">
+                <i class="ri-user-line" id="avatarIcon"></i>
+                <div class="avatar-overlay">
+                    <i class="ri-camera-line"></i>
+                </div>
+                <input type="file" id="avatarInput" accept="image/*" onchange="uploadAvatar(event)">
+            </div>
+            <div class="profile-info">
+                <h1 id="userName">John Doe</h1>
+                <p id="userEmail">johndoe@example.com</p>
+                <p id="userPhone">+91 98765 43210</p>
+                <span class="member-since">Member since December 2024</span>
+            </div>
+            <div class="profile-actions">
+                <button class="btn-edit" onclick="showSection('profile')">Edit Profile</button>
+                <button class="btn-logout" onclick="showLogoutPopup()">Logout</button>
+            </div>
+        </div>
+
+        <!-- Logout Popup -->
+        <div class="logout-popup-overlay" id="logoutPopup">
+            <div class="logout-popup">
+                <div class="logout-popup-icon">
+                    <i class="ri-logout-box-r-line"></i>
+                </div>
+                <h3>Logout</h3>
+                <p>Are you sure you want to logout from your account?</p>
+                <div class="logout-popup-buttons">
+                    <button class="btn-cancel" onclick="hideLogoutPopup()">Cancel</button>
+                    <button class="btn-confirm-logout" onclick="confirmLogout()">Yes, Logout</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Address Modal -->
+        <div class="address-modal-overlay" id="addressModal">
+            <div class="address-modal">
+                <h3><i class="ri-map-pin-add-line"></i> <span id="addressModalTitle">Add New Address</span></h3>
+                <form id="addressForm">
+                    <input type="hidden" id="addressIndex" value="-1">
+                    <div class="form-group">
+                        <label>Address Label *</label>
+                        <select id="addressLabel" required>
+                            <option value="">Select Label</option>
+                            <option value="Home">Home</option>
+                            <option value="Office">Office</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Full Name *</label>
+                        <input type="text" id="addressName" placeholder="Enter full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number *</label>
+                        <input type="tel" id="addressPhone" placeholder="Enter phone number" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Address *</label>
+                        <textarea id="addressStreet" placeholder="House no., Building, Street, Area" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>City *</label>
+                        <input type="text" id="addressCity" placeholder="Enter city" required>
+                    </div>
+                    <div class="form-group">
+                        <label>State *</label>
+                        <input type="text" id="addressState" placeholder="Enter state" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Pincode *</label>
+                        <input type="text" id="addressPincode" placeholder="Enter pincode" required>
+                    </div>
+                    <div class="address-modal-buttons">
+                        <button type="button" class="btn-cancel" onclick="closeAddressModal()">Cancel</button>
+                        <button type="submit" class="btn-save-address">Save Address</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Delete Confirmation Modal -->
+        <div class="delete-modal-overlay" id="deleteModal">
+            <div class="delete-modal">
+                <div class="delete-modal-icon">
+                    <i class="ri-delete-bin-line"></i>
+                </div>
+                <h3>Delete Address</h3>
+                <p>Are you sure you want to delete this address?</p>
+                <input type="hidden" id="deleteAddressIndex" value="-1">
+                <div class="delete-modal-buttons">
+                    <button class="btn-cancel" onclick="closeDeleteModal()">Cancel</button>
+                    <button class="btn-confirm-delete" onclick="confirmDeleteAddress()">Yes, Delete</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Popup -->
+        <div class="success-popup-overlay" id="successPopup">
+            <div class="success-popup">
+                <div class="success-popup-icon">
+                    <i class="ri-check-line"></i>
+                </div>
+                <h3 id="successTitle">Success!</h3>
+                <p id="successMessage">Your changes have been saved successfully.</p>
+                <button class="btn-success-ok" onclick="closeSuccessPopup()">OK</button>
+            </div>
+        </div>
+
+        <!-- Profile Content -->
+        <div class="profile-content">
+            <!-- Sidebar -->
+            <aside class="profile-sidebar">
+                <ul class="sidebar-menu">
+                    <li><a href="#" class="active" data-section="profile"><i class="ri-user-settings-line"></i> My Profile</a></li>
+                    <li><a href="#" data-section="orders"><i class="ri-shopping-bag-3-line"></i> My Orders</a></li>
+                    <li><a href="#" data-section="tracking"><i class="ri-truck-line"></i> Track Shipment</a></li>
+                    <li><a href="#" data-section="addresses"><i class="ri-map-pin-line"></i> Addresses</a></li>
+                    <li><a href="#" data-section="queries" id="queriesMenuLink"><i class="ri-question-line"></i> Raised Queries</a></li>
+                    <li><a href="#" data-section="wishlist"><i class="ri-heart-line"></i> Wishlist</a></li>
+                </ul>
+            </aside>
+
+            <!-- Main Content -->
+            <div class="profile-main">
+                <!-- My Profile Section -->
+                <section class="profile-section active" id="section-profile">
+                    <h2 class="section-title"><i class="ri-user-settings-line"></i> My Profile</h2>
+                    <form class="profile-form" id="profileForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName">First Name</label>
+                                <input type="text" id="firstName" value="John">
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Last Name</label>
+                                <input type="text" id="lastName" value="Doe">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="profileEmail">Email Address</label>
+                            <input type="email" id="profileEmail" value="johndoe@example.com" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="profilePhone">Phone Number</label>
+                            <input type="tel" id="profilePhone" value="+91 98765 43210">
+                        </div>
+                        <div class="form-group">
+                            <label for="dob">Date of Birth</label>
+                            <input type="date" id="dob">
+                        </div>
+                        <button type="submit" class="btn-save">Save Changes</button>
+                    </form>
+                </section>
+
+                <!-- My Orders Section -->
+                <section class="profile-section" id="section-orders">
+                    <h2 class="section-title"><i class="ri-shopping-bag-3-line"></i> My Orders</h2>
+                    <div class="orders-list" id="ordersList">
+                        <!-- Orders will be loaded dynamically -->
+                        <div class="loading-orders" style="text-align:center;padding:40px;color:#666;">
+                            <i class="ri-loader-4-line" style="font-size:2rem;animation:spin 1s linear infinite;display:inline-block;"></i>
+                            <p style="margin-top:16px;">Loading your orders...</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Track Shipment Section -->
+                <section class="profile-section" id="section-tracking">
+                    <h2 class="section-title"><i class="ri-truck-line"></i> Track Shipment</h2>
+                    <div class="tracking-search">
+                        <input type="text" id="trackingInput" placeholder="Enter Order ID or Tracking Number">
+                        <button onclick="searchTracking()">Track</button>
+                    </div>
+                    <div class="tracking-result" id="trackingResult" style="display: none;">
+                        <div class="tracking-header">
+                            <div class="tracking-order-info">
+                                <h3 id="trackingOrderId">Order #BLK2024120002</h3>
+                                <p>Expected Delivery: December 10, 2024</p>
+                            </div>
+                            <span class="order-status shipped" id="trackingStatus">Shipped</span>
+                        </div>
+                        <div class="tracking-timeline">
+                            <div class="tracking-step completed">
+                                <div class="tracking-step-title">Order Placed</div>
+                                <div class="tracking-step-desc">Your order has been placed successfully</div>
+                                <div class="tracking-step-time">Dec 6, 2024 - 10:30 AM</div>
+                            </div>
+                            <div class="tracking-step completed">
+                                <div class="tracking-step-title">Order Confirmed</div>
+                                <div class="tracking-step-desc">Seller has confirmed your order</div>
+                                <div class="tracking-step-time">Dec 6, 2024 - 11:45 AM</div>
+                            </div>
+                            <div class="tracking-step completed">
+                                <div class="tracking-step-title">Packed</div>
+                                <div class="tracking-step-desc">Your order has been packed and ready for dispatch</div>
+                                <div class="tracking-step-time">Dec 6, 2024 - 4:30 PM</div>
+                            </div>
+                            <div class="tracking-step current">
+                                <div class="tracking-step-title">Shipped</div>
+                                <div class="tracking-step-desc">Package is in transit - Mumbai Hub</div>
+                                <div class="tracking-step-time">Dec 7, 2024 - 9:15 AM</div>
+                            </div>
+                            <div class="tracking-step">
+                                <div class="tracking-step-title">Out for Delivery</div>
+                                <div class="tracking-step-desc">Package will be delivered today</div>
+                                <div class="tracking-step-time">Pending</div>
+                            </div>
+                            <div class="tracking-step">
+                                <div class="tracking-step-title">Delivered</div>
+                                <div class="tracking-step-desc">Package has been delivered</div>
+                                <div class="tracking-step-time">Pending</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Addresses Section -->
+                <section class="profile-section" id="section-addresses">
+                    <h2 class="section-title"><i class="ri-map-pin-line"></i> Saved Addresses</h2>
+                    <div id="addressesContent">
+                        <!-- Addresses will be loaded here -->
+                    </div>
+                    <div class="empty-state" id="emptyAddresses" style="display: none;">
+                        <i class="ri-map-pin-line"></i>
+                        <h3>No saved addresses</h3>
+                        <p>Add your addresses for faster checkout</p>
+                    </div>
+                    <div style="text-align: right; margin-top: 20px;">
+                        <button class="btn-save" onclick="openAddressModal()"><i class="ri-add-line"></i> Add New Address</button>
+                    </div>
+                </section>
+
+                <!-- Raised Queries Section -->
+                <section class="profile-section" id="section-queries">
+                    <h2 class="section-title"><i class="ri-question-line"></i> Raised Queries</h2>
+                    <div id="queriesContent">
+                        <!-- Queries will be loaded here -->
+                    </div>
+                    <div class="empty-state" id="emptyQueries" style="display: none;">
+                        <i class="ri-question-line"></i>
+                        <h3>No queries yet</h3>
+                        <p>You haven't submitted any inquiries yet</p>
+                        <a href="contact.html">Contact Us</a>
+                    </div>
+                </section>
+
+                <!-- Wishlist Section -->
+                <section class="profile-section" id="section-wishlist">
+                    <h2 class="section-title"><i class="ri-heart-line"></i> My Wishlist</h2>
+                    <div id="wishlistContent">
+                        <!-- Wishlist items will be loaded here -->
+                    </div>
+                    <div class="empty-state" id="emptyWishlist" style="display: none;">
+                        <i class="ri-heart-line"></i>
+                        <h3>Your wishlist is empty</h3>
+                        <p>Save your favorite items here to buy them later</p>
+                        <a href="index.html#shop">Start Shopping</a>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Check if user is logged in
+        function checkLogin() {
+            const user = JSON.parse(localStorage.getItem('blackonn_user'));
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+            // Update profile with user data
+            if (user.name) {
+                document.getElementById('userName').textContent = user.name;
+                const names = user.name.split(' ');
+                document.getElementById('firstName').value = names[0] || '';
+                document.getElementById('lastName').value = names.slice(1).join(' ') || '';
+            }
+            if (user.email) {
+                document.getElementById('userEmail').textContent = user.email;
+                document.getElementById('profileEmail').value = user.email;
+            }
+            if (user.phone) {
+                document.getElementById('userPhone').textContent = user.phone;
+                document.getElementById('profilePhone').value = user.phone;
+            }
+
+            // Initialize query notification badge and check every 5 seconds
+            updateQueryNotificationBadge();
+            setInterval(updateQueryNotificationBadge, 5000);
+        }
+
+        function updateQueryNotificationBadge() {
+            try {
+                const user = JSON.parse(localStorage.getItem('blackonn_user')) || {};
+                const allMessages = JSON.parse(localStorage.getItem('blackonn_contact_messages') || '[]');
+                
+                // Filter messages from current user and count those with new replies
+                const userQueries = allMessages.filter(msg => msg.email === user.email);
+                const queriesWithReplies = userQueries.filter(msg => msg.replies && msg.replies.length > 0);
+                
+                const queriesLink = document.getElementById('queriesMenuLink');
+                if (!queriesLink) return;
+
+                // Remove existing notification dot
+                const existingDot = queriesLink.querySelector('.query-notification-dot');
+                if (existingDot) existingDot.remove();
+
+                // Add notification dot if there are new replies
+                if (queriesWithReplies.length > 0) {
+                    const dot = document.createElement('span');
+                    dot.className = 'query-notification-dot';
+                    dot.textContent = queriesWithReplies.length > 9 ? '9+' : queriesWithReplies.length;
+                    queriesLink.appendChild(dot);
+                }
+            } catch (error) {
+                console.error('Error updating query notification:', error);
+            }
+        }
+
+        // Section navigation
+        const sidebarLinks = document.querySelectorAll('.sidebar-menu a');
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const section = link.dataset.section;
+                showSection(section);
+                
+                // Update active state
+                sidebarLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+            });
+        });
+
+        function showSection(sectionName) {
+            document.querySelectorAll('.profile-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById('section-' + sectionName).classList.add('active');
+            
+            // Load section-specific data
+            if (sectionName === 'orders') {
+                loadUserOrders();
+            } else if (sectionName === 'queries') {
+                loadUserQueries();
+            } else if (sectionName === 'wishlist') {
+                loadWishlist();
+            }
+            
+            // Update sidebar active state
+            sidebarLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.dataset.section === sectionName) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // Profile form submit
+        document.getElementById('profileForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const phone = document.getElementById('profilePhone').value;
+            
+            const user = JSON.parse(localStorage.getItem('blackonn_user')) || {};
+            user.name = firstName + ' ' + lastName;
+            user.phone = phone;
+            localStorage.setItem('blackonn_user', JSON.stringify(user));
+            
+            document.getElementById('userName').textContent = user.name;
+            document.getElementById('userPhone').textContent = phone;
+            
+            showSuccessPopup('Profile Updated!', 'Your profile has been updated successfully.');
+        });
+
+        // Success popup functions
+        function showSuccessPopup(title, message) {
+            document.getElementById('successTitle').textContent = title;
+            document.getElementById('successMessage').textContent = message;
+            document.getElementById('successPopup').classList.add('show');
+        }
+
+        function closeSuccessPopup() {
+            document.getElementById('successPopup').classList.remove('show');
+        }
+
+        // Close success popup when clicking outside
+        document.getElementById('successPopup').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeSuccessPopup();
+            }
+        });
+
+        // Load user orders
+        function loadUserOrders() {
+            const user = JSON.parse(localStorage.getItem('blackonn_user'));
+            if (!user || !user.email) {
+                document.getElementById('ordersList').innerHTML = '<div class="empty-state" style="text-align:center;padding:40px;color:#666;"><i class="ri-shopping-bag-3-line" style="font-size:2rem;display:block;margin-bottom:8px;"></i><p>No orders found. Start shopping to see your orders here.</p></div>';
+                return;
+            }
+
+            const allOrders = JSON.parse(localStorage.getItem('blackonn_orders') || '[]');
+            const userOrders = allOrders.filter(order => order.customer?.email === user.email);
+
+            if (userOrders.length === 0) {
+                document.getElementById('ordersList').innerHTML = '<div class="empty-state" style="text-align:center;padding:40px;color:#666;"><i class="ri-shopping-bag-3-line" style="font-size:2rem;display:block;margin-bottom:8px;"></i><p>No orders found. Start shopping to see your orders here.</p></div>';
+                return;
+            }
+
+            // Sort orders by date (newest first)
+            userOrders.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+
+            const ordersHtml = userOrders.map(order => {
+                const orderDate = order.createdAt ? new Date(order.createdAt).toLocaleDateString('en-IN', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                }) : 'Unknown date';
+
+                const statusClass = order.status?.toLowerCase() || 'pending';
+                const statusText = order.status || 'Pending';
+
+                const itemsHtml = order.items?.map(item => `
+                    <div class="order-item">
+                        <div class="order-item-image">
+                            <img src="${item.image || item.thumbImage || 'https://via.placeholder.com/80x80?text=Product'}" 
+                                 alt="${item.name || 'Product'}" 
+                                 onerror="this.src='https://via.placeholder.com/80x80?text=Product'">
+                        </div>
+                        <div class="order-item-details">
+                            <div class="order-item-name">${item.name || 'Product'}</div>
+                            <div class="order-item-meta">Size: ${item.size || '-'} | Color: ${item.color || '-'} | Qty: ${item.quantity || 1}</div>
+                        </div>
+                        <div class="order-item-price">₹${((item.price || 0) * (item.quantity || 1)).toLocaleString()}</div>
+                    </div>
+                `).join('') || '<div class="order-item"><div class="order-item-details"><div class="order-item-name">No items</div></div></div>';
+
+                return `
+                    <div class="order-card">
+                        <div class="order-header">
+                            <div>
+                                <div class="order-id">Order #${order.id}</div>
+                                <div class="order-date">Placed on ${orderDate}</div>
+                            </div>
+                            <span class="order-status ${statusClass}">${statusText}</span>
+                        </div>
+                        <div class="order-items">
+                            ${itemsHtml}
+                        </div>
+                        <div class="order-footer">
+                            <div class="order-total">Total: ₹${(order.total || order.amount || 0).toLocaleString()}</div>
+                            <div class="order-actions">
+                                <button class="btn-track" onclick="trackOrder('${order.id}')">Track Order</button>
+                                <button class="btn-reorder" onclick="reorderItems('${order.id}')">Reorder</button>
+                                <button class="btn-return" onclick="returnItems('${order.id}')">Return</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('ordersList').innerHTML = ordersHtml;
+        }
+
+        // Reorder items from a previous order
+        function reorderItems(orderId) {
+            const allOrders = JSON.parse(localStorage.getItem('blackonn_orders') || '[]');
+            const order = allOrders.find(o => o.id === orderId);
+            if (!order || !order.items) return;
+
+            // Add items to cart
+            let cart = JSON.parse(localStorage.getItem('blackonn_cart') || '[]');
+            order.items.forEach(item => {
+                const existingItem = cart.find(c => c.id === item.id && c.size === item.size && c.color === item.color);
+                if (existingItem) {
+                    existingItem.quantity += item.quantity || 1;
+                } else {
+                    cart.push({
+                        id: item.id,
+                        name: item.name,
+                        size: item.size,
+                        color: item.color,
+                        price: item.price,
+                        quantity: item.quantity || 1,
+                        image: item.image || 'https://via.placeholder.com/100x100?text=Product'
+                    });
+                }
+            });
+            localStorage.setItem('blackonn_cart', JSON.stringify(cart));
+            showSuccessPopup('Items Added!', 'Items from this order have been added to your cart.');
+            updateCartCount();
+        }
+
+        // Return items from a previous order
+        function returnItems(orderId) {
+            const allOrders = JSON.parse(localStorage.getItem('blackonn_orders') || '[]');
+            const order = allOrders.find(o => o.id === orderId);
+            if (!order) return;
+
+            // Check if order is eligible for return (delivered and within 14 days)
+            const orderDate = order.createdAt ? new Date(order.createdAt) : null;
+            const now = new Date();
+            const daysSinceOrder = orderDate ? Math.floor((now - orderDate) / (1000 * 60 * 60 * 24)) : 0;
+            
+            if (order.status !== 'Delivered') {
+                showSuccessPopup('Return Not Available', 'You can only return delivered orders.');
+                return;
+            }
+            
+            if (daysSinceOrder > 14) {
+                showSuccessPopup('Return Period Expired', 'Returns are only accepted within 14 days of delivery.');
+                return;
+            }
+
+            // Show return request modal
+            showReturnModal(order);
+        }
+
+        // Show return request modal
+        function showReturnModal(order) {
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.id = 'returnModal';
+            modal.innerHTML = `
+                <div class="modal-content" style="max-width: 500px;">
+                    <div class="modal-header">
+                        <h3>Request Return</h3>
+                        <span class="modal-close" onclick="closeReturnModal()">&times;</span>
+                    </div>
+                    <div class="modal-body">
+                        <div class="return-order-info">
+                            <p><strong>Order ID:</strong> ${order.id}</p>
+                            <p><strong>Order Date:</strong> ${order.createdAt ? new Date(order.createdAt).toLocaleDateString() : 'Unknown'}</p>
+                            <p><strong>Items:</strong></p>
+                            <div class="return-items">
+                                ${order.items?.map(item => `
+                                    <div class="return-item">
+                                        <label>
+                                            <input type="checkbox" value="${item.id}" data-item='${JSON.stringify(item)}'>
+                                            <div class="return-item-info">
+                                                <img src="${item.image || item.thumbImage || 'https://via.placeholder.com/50x50?text=Product'}" 
+                                                     alt="${item.name || 'Product'}" 
+                                                     onerror="this.src='https://via.placeholder.com/50x50?text=Product'"
+                                                     style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px; margin-right: 10px;">
+                                                <div>
+                                                    <div style="font-weight: 500; font-size: 14px;">${item.name} (${item.size}/${item.color})</div>
+                                                    <div style="font-size: 12px; color: #666;">Qty: ${item.quantity}</div>
+                                                </div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                `).join('') || '<p>No items found</p>'}
+                            </div>
+                        </div>
+                        <div class="return-reason">
+                            <label for="returnReason"><strong>Return Reason:</strong></label>
+                            <select id="returnReason" required>
+                                <option value="">Select a reason</option>
+                                <option value="defective">Defective Product</option>
+                                <option value="wrong_item">Wrong Item Received</option>
+                                <option value="not_as_described">Not as Described</option>
+                                <option value="size_issue">Size/Fit Issue</option>
+                                <option value="color_issue">Color Issue</option>
+                                <option value="changed_mind">Changed Mind</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="return-comments">
+                            <label for="returnComments"><strong>Additional Comments:</strong></label>
+                            <textarea id="returnComments" rows="3" placeholder="Please provide any additional details..."></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn-cancel" onclick="closeReturnModal()">Cancel</button>
+                        <button class="btn-submit" onclick="submitReturnRequest('${order.id}')">Submit Return Request</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            modal.classList.add('show');
+        }
+
+        // Close return modal
+        function closeReturnModal() {
+            const modal = document.getElementById('returnModal');
+            if (modal) {
+                modal.classList.remove('show');
+                setTimeout(() => modal.remove(), 300);
+            }
+        }
+
+        // Submit return request
+        function submitReturnRequest(orderId) {
+            const selectedItems = Array.from(document.querySelectorAll('#returnModal input[type="checkbox"]:checked'));
+            const reason = document.getElementById('returnReason').value;
+            const comments = document.getElementById('returnComments').value;
+
+            if (selectedItems.length === 0) {
+                alert('Please select at least one item to return.');
+                return;
+            }
+
+            if (!reason) {
+                alert('Please select a return reason.');
+                return;
+            }
+
+            // Create return request
+            const returnRequest = {
+                id: 'RET-' + Date.now(),
+                orderId: orderId,
+                items: selectedItems.map(checkbox => JSON.parse(checkbox.dataset.item)),
+                reason: reason,
+                comments: comments,
+                status: 'Pending',
+                requestedAt: new Date().toISOString()
+            };
+
+            // Save return request to localStorage
+            const returnRequests = JSON.parse(localStorage.getItem('blackonn_returns') || '[]');
+            returnRequests.push(returnRequest);
+            localStorage.setItem('blackonn_returns', JSON.stringify(returnRequests));
+
+            // Update order status to 'Return Requested'
+            const allOrders = JSON.parse(localStorage.getItem('blackonn_orders') || '[]');
+            const orderIndex = allOrders.findIndex(o => o.id === orderId);
+            if (orderIndex !== -1) {
+                allOrders[orderIndex].status = 'Return Requested';
+                localStorage.setItem('blackonn_orders', JSON.stringify(allOrders));
+            }
+
+            closeReturnModal();
+            showSuccessPopup('Return Request Submitted', 'Your return request has been submitted successfully. We will process it within 2-3 business days.');
+            
+            // Refresh orders display
+            loadUserOrders();
+        }
+
+        // Search tracking
+        function searchTracking() {
+            const trackingInput = document.getElementById('trackingInput').value.trim();
+            if (!trackingInput) {
+                document.getElementById('trackingResult').style.display = 'none';
+                return;
+            }
+
+            const allOrders = JSON.parse(localStorage.getItem('blackonn_orders') || '[]');
+            const allReturns = JSON.parse(localStorage.getItem('blackonn_returns') || '[]');
+            
+            // Check if input is a return ID (starts with RET-)
+            let returnRequest = null;
+            let order = null;
+            
+            if (trackingInput.startsWith('RET-')) {
+                // Tracking a return by return ID
+                returnRequest = allReturns.find(r => r.id === trackingInput);
+                if (returnRequest) {
+                    order = allOrders.find(o => o.id === returnRequest.orderId);
+                }
+            } else {
+                // Tracking an order by order ID
+                order = allOrders.find(o => o.id === trackingInput);
+                if (order && (order.status === 'Return Requested' || order.status.includes('Return'))) {
+                    returnRequest = allReturns.find(r => r.orderId === order.id);
+                }
+            }
+
+            if (!order && !returnRequest) {
+                document.getElementById('trackingResult').innerHTML = `
+                    <div class="empty-state" style="text-align:center;padding:40px;color:#666;">
+                        <i class="ri-error-warning-line" style="font-size:2rem;display:block;margin-bottom:8px;"></i>
+                        <p>Order or Return not found. Please check your Order ID or Return ID and try again.</p>
+                    </div>
+                `;
+                document.getElementById('trackingResult').style.display = 'block';
+                return;
+            }
+
+            // Determine if this is a return tracking
+            const isReturnTracking = returnRequest && trackingInput.startsWith('RET-');
+            const currentStatus = isReturnTracking ? returnRequest.status : (order.status || 'Pending');
+            const statusClass = currentStatus.toLowerCase().replace(' ', '-');
+            const orderDate = order?.createdAt ? new Date(order.createdAt).toLocaleDateString('en-IN') : 'Unknown';
+
+            let timelineSteps;
+
+            if (isReturnTracking) {
+                // Return tracking timeline
+                timelineSteps = [
+                    {
+                        title: 'Return Requested',
+                        desc: 'Your return request has been submitted',
+                        completed: true,
+                        time: returnRequest.requestedAt ? new Date(returnRequest.requestedAt).toLocaleString('en-IN') : ''
+                    },
+                    {
+                        title: 'Return Approved',
+                        desc: 'Your return request has been approved',
+                        completed: ['Approved', 'Processing', 'Completed'].includes(returnRequest.status),
+                        time: ['Approved', 'Processing', 'Completed'].includes(returnRequest.status) ? 'Approved' : ''
+                    },
+                    {
+                        title: 'Return Processing',
+                        desc: 'Your return is being processed',
+                        completed: ['Processing', 'Completed'].includes(returnRequest.status),
+                        time: returnRequest.status === 'Processing' ? 'Processing' : (returnRequest.status === 'Completed' ? 'Processed' : '')
+                    },
+                    {
+                        title: 'Refund Processed',
+                        desc: 'Refund has been processed to your account',
+                        completed: returnRequest.status === 'Completed',
+                        time: returnRequest.status === 'Completed' ? 'Refunded' : ''
+                    }
+                ];
+            } else {
+                // Regular order tracking timeline (including return requests)
+                const isReturnRequest = currentStatus === 'Return Requested' || currentStatus.includes('Return');
+                
+                timelineSteps = [
+                    {
+                        title: 'Order Placed',
+                        desc: 'Your order has been placed successfully',
+                        completed: true,
+                        time: order.createdAt ? new Date(order.createdAt).toLocaleString('en-IN') : ''
+                    },
+                    {
+                        title: 'Order Confirmed',
+                        desc: 'Seller has confirmed your order',
+                        completed: ['Processing', 'Shipped', 'Delivered'].includes(currentStatus) || isReturnRequest,
+                        time: ['Processing', 'Shipped', 'Delivered'].includes(currentStatus) || isReturnRequest ? 'Confirmed' : ''
+                    },
+                    {
+                        title: 'Packed',
+                        desc: 'Your order has been packed and ready for dispatch',
+                        completed: ['Shipped', 'Delivered'].includes(currentStatus) || isReturnRequest,
+                        time: ['Shipped', 'Delivered'].includes(currentStatus) || isReturnRequest ? 'Packed' : ''
+                    },
+                    {
+                        title: 'Shipped',
+                        desc: 'Package is in transit',
+                        completed: ['Shipped', 'Delivered'].includes(currentStatus) || isReturnRequest,
+                        time: currentStatus === 'Shipped' ? 'In transit' : (currentStatus === 'Delivered' ? 'Delivered' : (isReturnRequest ? 'Delivered' : ''))
+                    },
+                    {
+                        title: 'Delivered',
+                        desc: 'Package has been delivered successfully',
+                        completed: currentStatus === 'Delivered' || isReturnRequest,
+                        time: currentStatus === 'Delivered' ? 'Delivered' : (isReturnRequest ? 'Delivered' : '')
+                    },
+                    ...(isReturnRequest ? [{
+                        title: 'Return Requested',
+                        desc: 'Return request has been submitted',
+                        completed: true,
+                        time: returnRequest ? new Date(returnRequest.requestedAt).toLocaleString('en-IN') : 'Requested'
+                    }] : [])
+                ];
+            }
+
+            const timelineHtml = timelineSteps.map((step, index) => {
+                const stepClass = step.completed ? 'completed' : (index === timelineSteps.findIndex(s => !s.completed) ? 'current' : '');
+                return `
+                    <div class="tracking-step ${stepClass}">
+                        <div class="tracking-step-title">${step.title}</div>
+                        <div class="tracking-step-desc">${step.desc}</div>
+                        ${step.time ? `<div class="tracking-step-time">${step.time}</div>` : ''}
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('trackingResult').innerHTML = `
+                <div class="tracking-header">
+                    <div class="tracking-order-info">
+                        <h3 id="trackingOrderId">${isReturnTracking ? 'Return' : 'Order'} #${isReturnTracking ? returnRequest.id : order.id}</h3>
+                        <p>${isReturnTracking ? 'Return requested' : 'Ordered'} on ${orderDate}</p>
+                        ${isReturnTracking ? `<p><strong>Original Order:</strong> #${order.id}</p>` : ''}
+                    </div>
+                    <span class="order-status ${statusClass}" id="trackingStatus">${currentStatus}</span>
+                </div>
+                <div class="tracking-timeline">
+                    ${timelineHtml}
+                </div>
+                <div class="tracking-details">
+                    <h4>${isReturnTracking ? 'Return Details' : 'Order Details'}</h4>
+                    ${isReturnTracking ? `
+                        <div class="return-info" style="margin-bottom: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                            <p><strong>Return Reason:</strong> ${returnRequest.reason?.replace('_', ' ') || 'Not specified'}</p>
+                            ${returnRequest.comments ? `<p><strong>Comments:</strong> ${returnRequest.comments}</p>` : ''}
+                        </div>
+                        <div class="tracking-items">
+                            <h5>Items Being Returned:</h5>
+                            ${returnRequest.items?.map(item => `
+                                <div class="tracking-item">
+                                    <span>${item.name} (${item.size}/${item.color}) x${item.quantity}</span>
+                                    <span>₹${((item.price || 0) * (item.quantity || 1)).toLocaleString()}</span>
+                                </div>
+                            `).join('') || '<div class="tracking-item">No items found</div>'}
+                        </div>
+                    ` : `
+                        <div class="tracking-items">
+                            ${order.items?.map(item => `
+                                <div class="tracking-item">
+                                    <span>${item.name} (${item.size}/${item.color}) x${item.quantity}</span>
+                                    <span>₹${((item.price || 0) * (item.quantity || 1)).toLocaleString()}</span>
+                                </div>
+                            `).join('') || '<div class="tracking-item">No items found</div>'}
+                        </div>
+                    `}
+                    <div class="tracking-total">
+                        <strong>Total: ₹${(order.total || order.amount || 0).toLocaleString()}</strong>
+                    </div>
+                </div>
+            `;
+            document.getElementById('trackingResult').style.display = 'block';
+        }
+
+        // Track order from orders list
+        function trackOrder(orderId) {
+            // Switch to tracking section
+            showSection('tracking');
+            
+            // Update sidebar active state
+            const sidebarLinks = document.querySelectorAll('.sidebar-menu a');
+            sidebarLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.dataset.section === 'tracking') {
+                    link.classList.add('active');
+                }
+            });
+            
+            // Pre-fill tracking input and search
+            const trackingInput = document.getElementById('trackingInput');
+            if (trackingInput) {
+                trackingInput.value = orderId;
+                searchTracking();
+            }
+        }
+
+        // Logout Popup
+        function showLogoutPopup() {
+            document.getElementById('logoutPopup').classList.add('show');
+        }
+
+        function hideLogoutPopup() {
+            document.getElementById('logoutPopup').classList.remove('show');
+        }
+
+        function confirmLogout() {
+            localStorage.removeItem('blackonn_user');
+            window.location.href = 'login.html';
+        }
+
+        // Close popup when clicking outside
+        document.getElementById('logoutPopup').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideLogoutPopup();
+            }
+        });
+
+        // Load and display user queries/messages with admin replies
+        function loadUserQueries() {
+            const queriesContent = document.getElementById('queriesContent');
+            const emptyQueries = document.getElementById('emptyQueries');
+            const user = JSON.parse(localStorage.getItem('blackonn_user')) || {};
+            
+            try {
+                const allMessages = JSON.parse(localStorage.getItem('blackonn_contact_messages')) || [];
+                
+                // Filter messages from current user by email
+                const userQueries = allMessages.filter(msg => msg.email === user.email);
+                
+                if (userQueries.length === 0) {
+                    queriesContent.innerHTML = '';
+                    emptyQueries.style.display = 'flex';
+                    return;
+                }
+                
+                emptyQueries.style.display = 'none';
+                
+                // Sort by date (newest first)
+                userQueries.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                
+                queriesContent.innerHTML = userQueries.map(query => {
+                    const hasReplies = query.replies && query.replies.length > 0;
+                    const status = hasReplies ? 'replied' : 'pending';
+                    const statusLabel = hasReplies ? 'Replied' : 'Pending';
+                    
+                    let repliesHTML = '';
+                    if (hasReplies) {
+                        repliesHTML = `
+                            <div class="query-replies">
+                                <strong style="font-size: 14px; color: #1f2937;">Admin Replies:</strong>
+                                ${query.replies.map(reply => `
+                                    <div class="reply-item">
+                                        <div class="reply-header">
+                                            <strong>Admin Response</strong>
+                                            <small>${new Date(reply.timestamp).toLocaleString()}</small>
+                                        </div>
+                                        <p class="reply-content">${reply.text}</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        `;
+                    } else {
+                        repliesHTML = `
+                            <div class="query-replies">
+                                <p class="no-replies">No replies yet. We will get back to you soon.</p>
+                            </div>
+                        `;
+                    }
+                    
+                    const queryDate = new Date(query.timestamp).toLocaleString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                    
+                    return `
+                        <div class="query-card">
+                            <div class="query-header">
+                                <div>
+                                    <h3 class="query-subject">${query.subject || 'No Subject'}</h3>
+                                    <p class="query-date">${queryDate}</p>
+                                </div>
+                                <span class="query-status ${status}">${statusLabel}</span>
+                            </div>
+                            <div class="query-message">
+                                ${query.message}
+                            </div>
+                            ${repliesHTML}
+                        </div>
+                    `;
+                }).join('');
+                
+            } catch (error) {
+                console.error('Error loading queries:', error);
+                queriesContent.innerHTML = '<p style="color: #dc2626;">Error loading your queries. Please try again.</p>';
+            }
+        }
+
+        // Load and display wishlist items
+        function loadWishlist() {
+            const wishlistContent = document.getElementById('wishlistContent');
+            const emptyWishlist = document.getElementById('emptyWishlist');
+            const wishlist = JSON.parse(localStorage.getItem('blackonn_wishlist')) || [];
+
+            if (wishlist.length === 0) {
+                wishlistContent.innerHTML = '';
+                emptyWishlist.style.display = 'flex';
+                return;
+            }
+
+            emptyWishlist.style.display = 'none';
+            wishlistContent.innerHTML = `
+                <div class="wishlist-grid">
+                    ${wishlist.map((item, index) => `
+                        <div class="wishlist-item" data-index="${index}">
+                            <img src="${item.image}" alt="${item.name}" class="wishlist-item-image">
+                            <div class="wishlist-item-info">
+                                <div class="wishlist-item-name">${item.name}</div>
+                                <div class="wishlist-item-price">₹${item.price}</div>
+                                <div class="wishlist-item-actions">
+                                    <button class="btn-add-cart" onclick="addToCartFromWishlist(${index})">
+                                        <i class="ri-shopping-cart-line"></i> Add to Cart
+                                    </button>
+                                    <button class="btn-remove-wishlist" onclick="removeFromWishlist(${index})">
+                                        <i class="ri-delete-bin-line"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // Remove item from wishlist
+        function removeFromWishlist(index) {
+            let wishlist = JSON.parse(localStorage.getItem('blackonn_wishlist')) || [];
+            wishlist.splice(index, 1);
+            localStorage.setItem('blackonn_wishlist', JSON.stringify(wishlist));
+            loadWishlist();
+        }
+
+        // Add to cart from wishlist
+        function addToCartFromWishlist(index) {
+            const wishlist = JSON.parse(localStorage.getItem('blackonn_wishlist')) || [];
+            const item = wishlist[index];
+            
+            if (!item) return;
+            
+            // Redirect to product page to select size and color
+            window.location.href = `products.html?product=${item.productIndex}`;
+        }
+
+        // Load wishlist on page load
+        loadWishlist();
+
+        // ===== ADDRESS FUNCTIONS =====
+        
+        // Load and display addresses
+        function loadAddresses() {
+            const addressesContent = document.getElementById('addressesContent');
+            const emptyAddresses = document.getElementById('emptyAddresses');
+            const addresses = JSON.parse(localStorage.getItem('blackonn_addresses')) || [];
+
+            if (addresses.length === 0) {
+                addressesContent.innerHTML = '';
+                emptyAddresses.style.display = 'flex';
+                return;
+            }
+
+            emptyAddresses.style.display = 'none';
+            addressesContent.innerHTML = addresses.map((addr, index) => `
+                <div class="address-card">
+                    <div class="address-card-header">
+                        <div>
+                            <div class="address-label">${addr.label}</div>
+                            <div class="address-details">
+                                ${addr.name}<br>
+                                ${addr.street}<br>
+                                ${addr.city}, ${addr.state} - ${addr.pincode}<br>
+                                Phone: ${addr.phone}
+                            </div>
+                        </div>
+                        <div class="address-actions">
+                            <button class="btn-edit-address" onclick="editAddress(${index})">Edit</button>
+                            <button class="btn-delete-address" onclick="openDeleteModal(${index})">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Open address modal for adding new address
+        function openAddressModal() {
+            document.getElementById('addressModalTitle').textContent = 'Add New Address';
+            document.getElementById('addressForm').reset();
+            document.getElementById('addressIndex').value = '-1';
+            document.getElementById('addressModal').classList.add('show');
+        }
+
+        // Close address modal
+        function closeAddressModal() {
+            document.getElementById('addressModal').classList.remove('show');
+        }
+
+        // Edit address
+        function editAddress(index) {
+            const addresses = JSON.parse(localStorage.getItem('blackonn_addresses')) || [];
+            const addr = addresses[index];
+            
+            if (!addr) return;
+
+            document.getElementById('addressModalTitle').textContent = 'Edit Address';
+            document.getElementById('addressIndex').value = index;
+            document.getElementById('addressLabel').value = addr.label;
+            document.getElementById('addressName').value = addr.name;
+            document.getElementById('addressPhone').value = addr.phone;
+            document.getElementById('addressStreet').value = addr.street;
+            document.getElementById('addressCity').value = addr.city;
+            document.getElementById('addressState').value = addr.state;
+            document.getElementById('addressPincode').value = addr.pincode;
+            
+            document.getElementById('addressModal').classList.add('show');
+        }
+
+        // Save address (add or update)
+        document.getElementById('addressForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const index = parseInt(document.getElementById('addressIndex').value);
+            const newAddress = {
+                label: document.getElementById('addressLabel').value,
+                name: document.getElementById('addressName').value,
+                phone: document.getElementById('addressPhone').value,
+                street: document.getElementById('addressStreet').value,
+                city: document.getElementById('addressCity').value,
+                state: document.getElementById('addressState').value,
+                pincode: document.getElementById('addressPincode').value
+            };
+
+            let addresses = JSON.parse(localStorage.getItem('blackonn_addresses')) || [];
+
+            if (index === -1) {
+                // Add new address
+                addresses.push(newAddress);
+            } else {
+                // Update existing address
+                addresses[index] = newAddress;
+            }
+
+            localStorage.setItem('blackonn_addresses', JSON.stringify(addresses));
+            closeAddressModal();
+            loadAddresses();
+        });
+
+        // Open delete confirmation modal
+        function openDeleteModal(index) {
+            document.getElementById('deleteAddressIndex').value = index;
+            document.getElementById('deleteModal').classList.add('show');
+        }
+
+        // Close delete modal
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.remove('show');
+        }
+
+        // Confirm delete address
+        function confirmDeleteAddress() {
+            const index = parseInt(document.getElementById('deleteAddressIndex').value);
+            let addresses = JSON.parse(localStorage.getItem('blackonn_addresses')) || [];
+            
+            addresses.splice(index, 1);
+            localStorage.setItem('blackonn_addresses', JSON.stringify(addresses));
+            
+            closeDeleteModal();
+            loadAddresses();
+        }
+
+        // Close modals when clicking outside
+        document.getElementById('addressModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeAddressModal();
+            }
+        });
+
+        document.getElementById('deleteModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeDeleteModal();
+            }
+        });
+
+        // Load addresses on page load
+        loadAddresses();
+
+        // Upload avatar
+        function uploadAvatar(event) {
+            const file = event.target.files[0];
+            if (file) {
+                // Check file size (max 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('Image size should be less than 5MB');
+                    return;
+                }
+
+                // Check file type
+                if (!file.type.startsWith('image/')) {
+                    alert('Please select an image file');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imageData = e.target.result;
+                    
+                    // Update avatar display
+                    const avatarImage = document.getElementById('avatarImage');
+                    const avatarIcon = document.getElementById('avatarIcon');
+                    
+                    avatarImage.src = imageData;
+                    avatarImage.style.display = 'block';
+                    avatarIcon.style.display = 'none';
+                    
+                    // Save to localStorage
+                    const user = JSON.parse(localStorage.getItem('blackonn_user')) || {};
+                    user.avatar = imageData;
+                    localStorage.setItem('blackonn_user', JSON.stringify(user));
+                    
+                    alert('Profile picture updated successfully!');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Load saved avatar on page load
+        function loadAvatar() {
+            const user = JSON.parse(localStorage.getItem('blackonn_user'));
+            if (user && user.avatar) {
+                const avatarImage = document.getElementById('avatarImage');
+                const avatarIcon = document.getElementById('avatarIcon');
+                
+                avatarImage.src = user.avatar;
+                avatarImage.style.display = 'block';
+                avatarIcon.style.display = 'none';
+            }
+        }
+
+        // Initialize
+        loadAvatar();
+        checkLogin();
+        
+        // Check URL parameters for section
+        const urlParams = new URLSearchParams(window.location.search);
+        const sectionParam = urlParams.get('section');
+        if (sectionParam) {
+            showSection(sectionParam);
+            // Update sidebar active state
+            const sidebarLinks = document.querySelectorAll('.sidebar-menu a');
+            sidebarLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.dataset.section === sectionParam) {
+                    link.classList.add('active');
+                }
+            });
+        } else {
+            loadUserOrders();
+        }
+    </script>
+<script>
+      document.addEventListener('contextmenu', function (e) {
+      e.preventDefault();
+      });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "users": [
+    {
+      "id": "df826abf-1ffa-45fc-98ac-6f9cb9719ca3",
+      "name": "Arunava",
+      "email": "Arunava458@gmail.com",
+      "password": "9732@Piku",
+      "phone": "",
+      "role": "admin",
+      "createdAt": "2025-12-07T16:51:43.010Z"
+    }
+  ]
+}

@@ -1,0 +1,4174 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BLACKONN Admin Dashboard</title>
+    <link rel="shortcut icon" href="assets/img/favicon.png" type="image/x-icon" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.min.css" />
+    <link rel="stylesheet" href="assets/css/styles.css" />
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        background: #eef3f8;
+        min-height: 100vh;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      .admin-header {
+        background: #fff;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+      }
+      .admin-header .nav-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 5%;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+      .admin-header .nav-logo img {
+        width: 150px;
+        height: 42px;
+        object-fit: contain;
+      }
+      .admin-header nav {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .admin-header nav a {
+        color: #374151;
+        font-weight: 500;
+        text-decoration: none;
+        font-size: 0.9rem;
+        padding: 8px 16px;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+      }
+      .admin-header nav a:hover {
+        background: #f3f4f6;
+        color: #0f172a;
+      }
+      .admin-header nav a.logout-btn {
+        background: #fee2e2;
+        color: #dc2626;
+      }
+      .admin-header nav a.logout-btn:hover {
+        background: #fecaca;
+      }
+      .admin-page {
+        max-width: 1400px;
+        margin: 32px auto 80px;
+        padding: 0 5%;
+        display: flex;
+        flex-direction: column;
+        gap: 28px;
+      }
+      .section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+        margin-bottom: 16px;
+      }
+      .section-header-left {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .section-header-right {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+      .section-header h2 {
+        margin: 0;
+        font-size: 1.35rem;
+        font-weight: 600;
+        color: #0f172a;
+      }
+      .section-header small {
+        color: #6b7280;
+        font-size: 0.85rem;
+      }
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 16px;
+        margin-top: 8px;
+      }
+      .stat-card {
+        background: #fff;
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+        border: 1px solid rgba(0, 0, 0, 0.04);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+      .stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 30px rgba(15, 23, 42, 0.1);
+      }
+      .stat-card small {
+        display: block;
+        color: #6b7280;
+        margin-bottom: 8px;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .stat-card strong {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #0f172a;
+      }
+      .admin-panel {
+        background: #fff;
+        border-radius: 20px;
+        padding: 24px;
+        box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+        border: 1px solid rgba(0, 0, 0, 0.04);
+      }
+      .admin-panel form {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-bottom: 20px;
+        padding: 20px;
+        background: #f9fafb;
+        border-radius: 14px;
+        border: 1px solid #e5e7eb;
+      }
+      .admin-panel label {
+        display: flex;
+        flex-direction: column;
+        font-size: 0.8rem;
+        font-weight: 600;
+        gap: 6px;
+        color: #374151;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+      }
+      .admin-panel input,
+      .admin-panel select,
+      .admin-panel textarea {
+        font-size: 0.95rem;
+        padding: 12px 14px;
+        border-radius: 10px;
+        border: 1.5px solid #e5e7eb;
+        background: #fff;
+        transition: all 0.2s ease;
+        font-weight: 400;
+        color: #1f2937;
+      }
+      .admin-panel input:focus,
+      .admin-panel select:focus,
+      .admin-panel textarea:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+      }
+      .admin-panel input::placeholder {
+        color: #9ca3af;
+      }
+      .admin-panel .form-actions {
+        grid-column: 1 / -1;
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        padding-top: 8px;
+        border-top: 1px solid #e5e7eb;
+        margin-top: 8px;
+      }
+      .admin-panel button {
+        font-size: 0.9rem;
+        padding: 12px 24px;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border: none;
+      }
+      .admin-panel button.primary {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        color: #fff;
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.25);
+      }
+      .admin-panel button.primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(15, 23, 42, 0.35);
+      }
+      .admin-panel button.secondary {
+        background: #fff;
+        border: 1.5px solid #d1d5db;
+        color: #374151;
+      }
+      .admin-panel button.secondary:hover {
+        background: #f3f4f6;
+        border-color: #9ca3af;
+      }
+      .admin-panel button.danger {
+        background: #dc2626;
+        color: #fff;
+      }
+      .admin-panel button.danger:hover {
+        background: #b91c1c;
+      }
+      .admin-panel button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none !important;
+      }
+
+      /* Modal Button Styles */
+      button.primary {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        color: #fff;
+        padding: 10px 24px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.25);
+      }
+
+      button.primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(15, 23, 42, 0.35);
+      }
+
+      button.secondary {
+        background: #fff;
+        border: 1.5px solid #d1d5db;
+        color: #374151;
+        padding: 10px 24px;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      button.secondary:hover {
+        background: #f3f4f6;
+        border-color: #9ca3af;
+      }
+
+      /* Search and Filters */
+      .search-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+      .search-input-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+        width: 300px;
+      }
+      .search-input-wrapper .search-input {
+        width: 100%;
+        padding: 8px 40px 8px 36px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: border-color 0.2s ease;
+      }
+      .search-input-wrapper .search-input:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      }
+      .search-input-wrapper .search-icon {
+        position: absolute;
+        left: 12px;
+        color: #6b7280;
+        font-size: 16px;
+        z-index: 1;
+      }
+      .search-input-wrapper .clear-search-btn {
+        position: absolute;
+        right: 8px;
+        background: none;
+        border: none;
+        color: #6b7280;
+        cursor: pointer;
+        font-size: 18px;
+        padding: 4px;
+        border-radius: 4px;
+        transition: color 0.2s ease;
+        z-index: 1;
+      }
+      .search-input-wrapper .clear-search-btn:hover {
+        color: #374151;
+        background: #f3f4f6;
+      }
+
+      .filters-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 0;
+        border-bottom: 1px solid #e5e7eb;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+      .filter-group {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .filter-group label {
+        font-weight: 500;
+        color: #374151;
+        font-size: 14px;
+      }
+      .filter-group select {
+        padding: 6px 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        font-size: 14px;
+        background: #fff;
+        min-width: 120px;
+      }
+      .filter-group select:focus {
+        outline: none;
+        border-color: #3b82f6;
+      }
+
+      .bulk-actions {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+      .bulk-actions button {
+        padding: 8px 16px;
+        font-size: 13px;
+        font-weight: 500;
+      }
+
+      /* Enhanced Table */
+      .orders-table th:first-child,
+      .orders-table td:first-child {
+        width: 40px;
+        text-align: center;
+        padding: 12px 8px;
+      }
+      .orders-table th:nth-child(2),
+      .orders-table td:nth-child(2) {
+        width: 100px;
+        word-break: break-word;
+      }
+      .orders-table th:nth-child(3),
+      .orders-table td:nth-child(3) {
+        width: 120px;
+        word-break: break-word;
+      }
+      .orders-table th:nth-child(4),
+      .orders-table td:nth-child(4) {
+        width: 90px;
+        text-align: right;
+        padding-right: 24px;
+      }
+      .orders-table th:nth-child(5),
+      .orders-table td:nth-child(5) {
+        width: 100px;
+      }
+      .orders-table th:nth-child(6),
+      .orders-table td:nth-child(6) {
+        width: 100px;
+      }
+      .orders-table th:nth-child(7),
+      .orders-table td:nth-child(7) {
+        width: 100px;
+      }
+      .orders-table th:nth-child(8),
+      .orders-table td:nth-child(8) {
+        width: 120px;
+      }
+      .orders-table th:nth-child(9),
+      .orders-table td:nth-child(9) {
+        width: 80px;
+        text-align: center;
+      }
+      .orders-table th:first-child input[type="checkbox"] {
+        margin: 0;
+      }
+      .orders-table td:first-child input[type="checkbox"] {
+        margin: 0;
+      }
+      .orders-table tr.selected {
+        background: #fef3c7;
+      }
+
+      /* Loading States */
+      .loading-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+      }
+      .loading-spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid #f3f4f6;
+        border-top: 4px solid #3b82f6;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+
+      /* Quick Actions */
+      .quick-actions {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        z-index: 1000;
+      }
+      .quick-action-btn {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: #0f172a;
+        color: white;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        transition: all 0.3s ease;
+      }
+      .quick-action-btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+      }
+      .quick-action-btn:active {
+        transform: scale(0.95);
+      }
+
+      /* Enhanced Modal */
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 10000;
+        align-items: center;
+        justify-content: center;
+      }
+      .modal.show {
+        display: flex;
+      }
+      .modal-content {
+        background: white;
+        border-radius: 12px;
+        padding: 24px;
+        max-width: 500px;
+        width: 90%;
+        max-height: 80vh;
+        overflow-y: auto;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      }
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #e5e7eb;
+      }
+      .modal-header h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+      }
+      .modal-close {
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: #6b7280;
+        padding: 0;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.2s ease;
+      }
+      .modal-close:hover {
+        background: #f3f4f6;
+        color: #374151;
+      }
+      .modal-body {
+        margin-bottom: 20px;
+      }
+      .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        padding-top: 15px;
+        border-top: 1px solid #e5e7eb;
+      }
+
+      /* Policy Modal Overlay */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 10001;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .modal-content {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.16);
+        max-width: 600px;
+        width: 95vw;
+        max-height: 90vh;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 24px 28px;
+        border-bottom: 1px solid #e5e7eb;
+      }
+
+      .modal-header h3 {
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1f2937;
+      }
+
+      .modal-close {
+        background: none;
+        border: none;
+        font-size: 28px;
+        color: #9ca3af;
+        cursor: pointer;
+        transition: color 0.2s ease;
+        padding: 0;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .modal-close:hover {
+        color: #1f2937;
+      }
+
+      .modal-body {
+        padding: 24px 28px;
+        flex: 1;
+        overflow-y: auto;
+      }
+
+      .modal-footer {
+        display: flex;
+        gap: 12px;
+        padding: 16px 28px;
+        border-top: 1px solid #e5e7eb;
+        justify-content: flex-end;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .form-group label {
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 8px;
+        font-size: 0.95rem;
+      }
+
+      .form-group input,
+      .form-group select,
+      .form-group textarea {
+        padding: 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        font-family: inherit;
+        font-size: 0.95rem;
+        transition: all 0.2s ease;
+      }
+
+      .form-group input:focus,
+      .form-group select:focus,
+      .form-group textarea:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      }
+
+      .form-group small {
+        color: #6b7280;
+        font-size: 0.85rem;
+        margin-top: 6px;
+      }
+
+      .table-wrap {
+        overflow-x: auto;
+        margin-top: 16px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.875rem;
+        table-layout: fixed;
+      }
+      table thead th {
+        text-align: left;
+        padding: 12px 16px;
+        color: #6b7280;
+        font-weight: 600;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        background: #f9fafb;
+        border-bottom: 2px solid #e5e7eb;
+      }
+      table thead th:first-child {
+        border-radius: 10px 0 0 0;
+      }
+      table thead th:last-child {
+        border-radius: 0 10px 0 0;
+      }
+      table tbody td {
+        padding: 14px 16px;
+        border-bottom: 1px solid #f3f4f6;
+        vertical-align: middle;
+        color: #374151;
+      }
+      table tbody tr:hover {
+        background: #f9fafb;
+      }
+      table tbody tr:last-child td {
+        border-bottom: none;
+      }
+      .product-label {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+      }
+      .product-label strong {
+        display: block;
+        font-weight: 600;
+        color: #1f2937;
+      }
+      .product-table img {
+        width: 40px;
+        height: 40px;
+        object-fit: cover;
+        border-radius: 6px;
+        border: 1px solid #e5e7eb;
+      }
+      
+      /* Compact product table styling */
+      .product-table tbody td {
+        padding: 8px 12px;
+      }
+      .product-table thead th {
+        padding: 8px 12px;
+      }
+      .product-table .product-label {
+        gap: 10px;
+      }
+      .product-table .product-label strong {
+        font-size: 0.85rem;
+        line-height: 1.2;
+      }
+      .product-table .product-label small {
+        font-size: 0.7rem;
+        line-height: 1.2;
+        display: block;
+        max-width: 180px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .product-table .pill {
+        padding: 4px 8px;
+        font-size: 0.7rem;
+      }
+      .product-table .actions button {
+        width: 28px;
+        height: 28px;
+        font-size: 0.85rem;
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 6px 12px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, #dbeafe 0%, #e0f2fe 100%);
+        color: #1e40af;
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+      .actions {
+        display: flex;
+        gap: 6px;
+      }
+      .actions button {
+        border: none;
+        background: #f3f4f6;
+        cursor: pointer;
+        font-size: 1rem;
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        color: #6b7280;
+      }
+      .actions button:hover {
+        background: #e5e7eb;
+        color: #1f2937;
+      }
+      .actions button[data-action="delete"]:hover {
+        background: #fee2e2;
+        color: #dc2626;
+      }
+      .actions button[data-action="edit"]:hover {
+        background: #dbeafe;
+        color: #2563eb;
+      }
+      .orders-table .status select {
+        padding: 8px 12px;
+        border-radius: 8px;
+        border: 1.5px solid #e5e7eb;
+        font-size: 0.85rem;
+        font-weight: 500;
+        cursor: pointer;
+        background: #fff;
+        transition: all 0.2s ease;
+      }
+      .orders-table .status select:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+      }
+      .status-badge {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+      .status-pending { background: #fef3c7; color: #92400e; }
+      .status-processing { background: #dbeafe; color: #1e40af; }
+      .status-shipped { background: #e0e7ff; color: #3730a3; }
+      .status-delivered { background: #d1fae5; color: #065f46; }
+      .status-cancelled { background: #fee2e2; color: #991b1b; }
+      .refresh-indicator {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.75rem;
+        color: #6b7280;
+        padding: 4px 10px;
+        background: #f3f4f6;
+        border-radius: 20px;
+      }
+      .refresh-indicator.active {
+        color: #059669;
+        background: #d1fae5;
+      }
+      .refresh-indicator i {
+        animation: none;
+      }
+      .refresh-indicator.loading i {
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      .auto-refresh-toggle {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.85rem;
+        color: #374151;
+        cursor: pointer;
+      }
+      .auto-refresh-toggle input {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+      }
+      .order-items-detail {
+        font-size: 0.8rem;
+        color: #6b7280;
+        max-width: 200px;
+      }
+      .order-items-detail .item {
+        margin-bottom: 4px;
+        padding: 4px 8px;
+        background: #f9fafb;
+        border-radius: 6px;
+      }
+      .order-address {
+        font-size: 0.75rem;
+        color: #9ca3af;
+        margin-top: 4px;
+      }
+      .section-header-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .user-role-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 10px;
+        border-radius: 16px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .user-role-customer {
+        background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+        color: #3730a3;
+        border: 1px solid #a5b4fc;
+      }
+      .user-role-admin {
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        color: #92400e;
+        border: 1px solid #f59e0b;
+        font-weight: 700;
+      }
+      .user-row-admin {
+        background: linear-gradient(90deg, rgba(254, 243, 199, 0.1) 0%, rgba(254, 243, 199, 0.05) 100%);
+        border-left: 4px solid #f59e0b;
+      }
+      .user-row-customer {
+        background: linear-gradient(90deg, rgba(224, 231, 255, 0.1) 0%, rgba(224, 231, 255, 0.05) 100%);
+        border-left: 4px solid #3730a3;
+      }
+      .last-activity {
+        font-size: 0.7rem;
+        color: #9ca3af;
+      }
+      .users-section {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      .users-section .info-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 16px;
+        justify-content: space-between;
+        padding: 16px 20px;
+        background: #f9fafb;
+        border-radius: 12px;
+        border: 1px solid #e5e7eb;
+      }
+      .users-section .info-row #userCount {
+        font-weight: 600;
+        color: #374151;
+        font-size: 0.95rem;
+      }
+      .btn-export {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        color: #fff;
+        border: none;
+        padding: 10px 18px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.85rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
+      }
+      .btn-export:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(15, 23, 42, 0.3);
+      }
+      .btn-export i {
+        font-size: 1rem;
+      }
+      #productMessage {
+        padding: 10px 16px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        margin-top: 8px;
+        display: none;
+      }
+      #productMessage:not(:empty) {
+        display: block;
+      }
+      .image-upload-group {
+        display: flex;
+        gap: 16px;
+        grid-column: 1 / -1;
+      }
+      .image-upload-group label {
+        flex: 1;
+      }
+      .product-images {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+      }
+      .product-images > img {
+        width: 36px;
+        height: 36px;
+        object-fit: cover;
+        border-radius: 6px;
+      }
+      .product-images .thumbs-container {
+        display: flex;
+        align-items: center;
+      }
+      .product-images .thumb-img {
+        width: 28px;
+        height: 28px;
+        border: 1px dashed #d1d5db;
+        border-radius: 4px;
+        object-fit: cover;
+      }
+      .product-images .more-thumbs {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        background: #e5e7eb;
+        border-radius: 4px;
+        font-size: 0.65rem;
+        font-weight: 600;
+        color: #4b5563;
+        margin-left: -6px;
+      }
+      .product-id {
+        font-size: 0.7rem;
+        color: #9ca3af;
+        display: block;
+        margin-top: 1px;
+      }
+      .color-size-badge {
+        display: inline-block;
+        padding: 3px 8px;
+        background: #f3f4f6;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        color: #4b5563;
+      }
+
+      /* Policy Table Styling */
+      .policy-name-col {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .policy-name-col strong {
+        display: block;
+        color: #1f2937;
+        font-weight: 600;
+      }
+
+      .policy-name-col small {
+        display: block;
+        color: #9ca3af;
+        font-size: 0.8rem;
+        font-family: 'Courier New', monospace;
+      }
+
+      .type-badge {
+        display: inline-block;
+        padding: 6px 12px;
+        background: #f3f4f6;
+        color: #374151;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        font-weight: 500;
+      }
+
+      .type-badge.type-terms {
+        background: #dbeafe;
+        color: #1e40af;
+      }
+
+      .type-badge.type-privacy {
+        background: #dcfce7;
+        color: #166534;
+      }
+
+      .type-badge.type-return {
+        background: #fed7aa;
+        color: #92400e;
+      }
+
+      .type-badge.type-refund {
+        background: #fecaca;
+        color: #dc2626;
+      }
+
+      .type-badge.type-shipping {
+        background: #c7d2fe;
+        color: #3730a3;
+      }
+
+      .type-badge.type-payment {
+        background: #e9d5ff;
+        color: #6b21a8;
+      }
+
+      .type-badge.type-cancellation {
+        background: #fae8ff;
+        color: #7c2d12;
+      }
+
+      .type-badge.type-custom {
+        background: #f0fdf4;
+        color: #15803d;
+      }
+
+      .actions-col {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .action-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        border: none;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .action-btn.edit-btn {
+        background: #dbeafe;
+        color: #1e40af;
+      }
+
+      .action-btn.edit-btn:hover {
+        background: #bfdbfe;
+        transform: translateY(-2px);
+        box-shadow: 0 2px 8px rgba(30, 64, 175, 0.2);
+      }
+
+      .action-btn.delete-btn {
+        background: #fee2e2;
+        color: #dc2626;
+      }
+
+      .action-btn.delete-btn:hover {
+        background: #fecaca;
+        transform: translateY(-2px);
+        box-shadow: 0 2px 8px rgba(220, 38, 38, 0.2);
+      }
+
+      .action-btn i {
+        font-size: 1rem;
+      }
+
+      .stock-badge {
+        display: inline-block;
+        padding: 3px 8px;
+        background: #dcfce7;
+        color: #166534;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        font-weight: 500;
+      }
+      .stock-badge.low-stock {
+        background: #fef3c7;
+        color: #92400e;
+      }
+      
+      .position-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        color: #fff;
+        border-radius: 50%;
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+      .position-badge.empty {
+        background: #f3f4f6;
+        color: #9ca3af;
+      }
+
+      /* Low Stock Notification */
+      .low-stock-notification {
+        background: #fef3c7;
+        border: 1px solid #fcd34d;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        padding: 0;
+        overflow: hidden;
+      }
+
+      .notification-content {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 16px 20px;
+        background: linear-gradient(135deg, rgba(254, 243, 199, 0.8), rgba(253, 230, 138, 0.8));
+      }
+
+      .notification-content i {
+        font-size: 1.5rem;
+        color: #92400e;
+        flex-shrink: 0;
+      }
+
+      .notification-text {
+        flex: 1;
+      }
+
+      .notification-text strong {
+        display: block;
+        color: #92400e;
+        font-size: 1rem;
+        margin-bottom: 4px;
+      }
+
+      .notification-text p {
+        color: #78350f;
+        font-size: 0.9rem;
+        margin: 0;
+      }
+
+      .notification-close {
+        background: none;
+        border: none;
+        color: #92400e;
+        font-size: 1.2rem;
+        cursor: pointer;
+        padding: 0 8px;
+        flex-shrink: 0;
+        transition: all 0.2s ease;
+      }
+
+      .notification-close:hover {
+        color: #b45309;
+        transform: scale(1.2);
+      }
+
+      .position-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        color: #fff;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 700;
+        box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+      }
+      .position-badge.empty {
+        background: #e5e7eb;
+        color: #9ca3af;
+        box-shadow: none;
+      }
+      .image-upload-hint {
+        color: #9ca3af;
+        font-size: 0.7rem;
+        font-weight: 400;
+        text-transform: none;
+        letter-spacing: 0;
+        margin-top: 4px;
+      }
+
+      /* Returns specific styles */
+      .returns-table th:first-child,
+      .returns-table td:first-child {
+        width: 40px;
+        text-align: center;
+        padding: 12px 8px;
+      }
+      .returns-table th:nth-child(2),
+      .returns-table td:nth-child(2) {
+        width: 100px;
+        word-break: break-word;
+      }
+      .returns-table th:nth-child(3),
+      .returns-table td:nth-child(3) {
+        width: 100px;
+        word-break: break-word;
+      }
+      .returns-table th:nth-child(4),
+      .returns-table td:nth-child(4) {
+        width: 120px;
+        word-break: break-word;
+      }
+      .returns-table th:nth-child(5),
+      .returns-table td:nth-child(5) {
+        width: 110px;
+      }
+      .returns-table th:nth-child(6),
+      .returns-table td:nth-child(6) {
+        width: 110px;
+      }
+      .returns-table th:nth-child(7),
+      .returns-table td:nth-child(7) {
+        width: 100px;
+      }
+      .returns-table th:nth-child(8),
+      .returns-table td:nth-child(8) {
+        width: 100px;
+      }
+      .returns-table th:nth-child(9),
+      .returns-table td:nth-child(9) {
+        width: 80px;
+        text-align: center;
+      }
+      .returns-table th:first-child input[type="checkbox"] {
+        margin: 0;
+      }
+      .returns-table td:first-child input[type="checkbox"] {
+        margin: 0;
+      }
+      .returns-table tr.selected {
+        background: #fef3c7;
+      }
+      .returns-table .status select {
+        padding: 8px 12px;
+        border-radius: 8px;
+        border: 1.5px solid #e5e7eb;
+        font-size: 0.85rem;
+        font-weight: 500;
+        cursor: pointer;
+        background: #fff;
+        transition: all 0.2s ease;
+      }
+      .returns-table .status select:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+      }
+      .return-status-badge {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+      .return-status-pending { background: #fef3c7; color: #92400e; }
+      .return-status-approved { background: #dbeafe; color: #1e40af; }
+      .return-status-rejected { background: #fee2e2; color: #991b1b; }
+      .return-status-processing { background: #e0e7ff; color: #3730a3; }
+      .return-status-completed { background: #d1fae5; color: #065f46; }
+      .return-items-summary {
+        font-size: 0.8rem;
+        color: #6b7280;
+        max-width: 200px;
+      }
+      .return-items-summary .item {
+        margin-bottom: 4px;
+        padding: 4px 8px;
+        background: #f9fafb;
+        border-radius: 6px;
+      }
+      .return-reason-badge {
+        display: inline-block;
+        padding: 4px 10px;
+        background: #f3f4f6;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        color: #4b5563;
+        text-transform: capitalize;
+      }
+      
+      /* Table scroll wrapper for mobile */
+      .table-wrap {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        margin: 0 -16px;
+        padding: 0 16px;
+      }
+      
+      @media (max-width: 1024px) {
+        .admin-panel form {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .section-header-actions {
+          flex-wrap: wrap;
+          gap: 8px;
+        }
+        .filters-bar {
+          flex-wrap: wrap;
+          gap: 10px;
+        }
+        .bulk-actions {
+          width: 100%;
+          justify-content: flex-start;
+        }
+      }
+      @media (max-width: 768px) {
+        .admin-header .nav-container {
+          flex-direction: column;
+          gap: 16px;
+          padding: 12px 4%;
+        }
+        .admin-header nav {
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+        .admin-header nav a {
+          padding: 6px 12px;
+          font-size: 0.85rem;
+        }
+        .admin-page {
+          padding: 0 4%;
+          margin-top: 20px;
+        }
+        .admin-panel {
+          padding: 16px;
+        }
+        .admin-panel form {
+          grid-template-columns: 1fr;
+          padding: 16px;
+          gap: 14px;
+        }
+        .admin-panel .form-actions {
+          flex-direction: column;
+        }
+        .admin-panel button {
+          width: 100%;
+          justify-content: center;
+        }
+        .section-header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 12px;
+        }
+        .stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 12px;
+        }
+        .stat-card {
+          padding: 16px;
+        }
+        .stat-card strong {
+          font-size: 1.4rem;
+        }
+        table thead {
+          display: none;
+        }
+        table tbody td {
+          display: block;
+          width: 100%;
+          padding: 8px 12px;
+          text-align: left;
+        }
+        table tbody td::before {
+          content: attr(data-label);
+          font-weight: 600;
+          display: block;
+          margin-bottom: 4px;
+          color: #6b7280;
+          font-size: 0.75rem;
+          text-transform: uppercase;
+        }
+        table tbody tr {
+          display: block;
+          margin-bottom: 16px;
+          background: #f9fafb;
+          border-radius: 12px;
+          padding: 8px;
+          border: 1px solid #e5e7eb;
+        }
+        /* Product images larger on mobile for better visibility */
+        .product-table img {
+          width: 80px;
+          height: 80px;
+          object-fit: cover;
+          border-radius: 8px;
+          aspect-ratio: 1/1;
+        }
+        .product-label {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 8px;
+        }
+        .actions-col {
+          flex-direction: column;
+        }
+        .action-btn {
+          width: 100%;
+          justify-content: center;
+        }
+        .actions {
+          justify-content: flex-start;
+          margin-top: 8px;
+        }
+        .users-section .info-row {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        .btn-export {
+          width: 100%;
+          justify-content: center;
+        }
+        .image-upload-group {
+          flex-direction: column;
+        }
+      }
+      @media (max-width: 480px) {
+        .stats-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* Policy Management Styles */
+      .policy-modal .modal-content {
+        max-width: 800px;
+        width: 90vw;
+      }
+      .policy-modal textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        font-family: inherit;
+        font-size: 14px;
+        line-height: 1.5;
+        resize: vertical;
+        min-height: 300px;
+      }
+      .policy-modal textarea:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      }
+
+      /* Policy Status Indicator */
+      #policyStatus {
+        font-weight: 500;
+        font-size: 0.9rem;
+        transition: color 0.3s ease;
+      }
+      .status-active { background: #d1fae5; color: #065f46; }
+      .status-draft { background: #fef3c7; color: #92400e; }
+      .status-inactive { background: #fee2e2; color: #991b1b; }
+
+      /* Messages/Contact Section Styles */
+      #messagesTable tbody tr.status-unread {
+        background-color: #fef9f3;
+        font-weight: 500;
+      }
+      #messagesTable tbody tr.status-read {
+        background-color: #fff;
+        opacity: 0.8;
+      }
+      .status-badge {
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        display: inline-block;
+      }
+      .badge-warning {
+        background: #fef3c7;
+        color: #92400e;
+      }
+      .badge-success {
+        background: #d1fae5;
+        color: #065f46;
+      }
+      .message-detail {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      .detail-row {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .detail-row.full-width {
+        grid-column: 1 / -1;
+      }
+      .detail-row label {
+        font-weight: 600;
+        color: #374151;
+        font-size: 0.9rem;
+      }
+      .detail-row p {
+        margin: 0;
+        padding: 12px;
+        background: #f9fafb;
+        border-radius: 6px;
+        border-left: 3px solid #3b82f6;
+        word-break: break-word;
+      }
+      .detail-row a {
+        color: #3b82f6;
+        text-decoration: none;
+      }
+      .detail-row a:hover {
+        text-decoration: underline;
+      }
+      .message-content {
+        white-space: pre-wrap;
+        font-family: 'Courier New', monospace;
+        font-size: 0.95rem;
+      }
+      .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 80px 20px;
+        color: #9ca3af;
+        text-align: center;
+      }
+      .empty-state i {
+        font-size: 3rem;
+        margin-bottom: 16px;
+        opacity: 0.5;
+      }
+      .empty-state p {
+        margin: 0;
+        font-size: 1.1rem;
+      }
+
+      /* Reply Section Styles */
+      .replies-section {
+        margin: 20px 0;
+        padding: 16px;
+        background: #f9fafb;
+        border-radius: 8px;
+        border-left: 4px solid #22c55e;
+      }
+      .replies-section h4 {
+        margin: 0 0 12px 0;
+        font-size: 0.95rem;
+        color: #1f2937;
+      }
+      .replies-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .reply-item {
+        background: #fff;
+        padding: 12px;
+        border-radius: 6px;
+        border-left: 3px solid #22c55e;
+      }
+      .reply-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        font-size: 12px;
+      }
+      .reply-header strong {
+        color: #059669;
+      }
+      .reply-header small {
+        color: #9ca3af;
+      }
+      .reply-content {
+        color: #374151;
+        font-size: 14px;
+        line-height: 1.5;
+        margin: 0;
+      }
+
+      .reply-form-section {
+        margin-top: 20px;
+        padding-top: 16px;
+        border-top: 1px solid #e5e7eb;
+      }
+      .reply-form-section h4 {
+        margin: 0 0 12px 0;
+        font-size: 0.95rem;
+        color: #1f2937;
+      }
+      .reply-textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        font-family: inherit;
+        font-size: 14px;
+        line-height: 1.5;
+        resize: vertical;
+        min-height: 100px;
+      }
+      .reply-textarea:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      }
+
+      /* Notification Badge Styles */
+      .notification-badge {
+        position: relative;
+        display: inline-block;
+      }
+      .notification-dot {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        background: #dc2626;
+        color: white;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 700;
+        border: 2px solid white;
+        box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+        animation: pulse-badge 2s infinite;
+      }
+      @keyframes pulse-badge {
+        0%, 100% {
+          transform: scale(1);
+          box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+        }
+        50% {
+          transform: scale(1.1);
+          box-shadow: 0 2px 12px rgba(220, 38, 38, 0.5);
+        }
+      }
+      .notification-badge.has-notification a {
+        color: #dc2626;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="admin-header">
+      <div class="nav-container">
+        <div class="nav-logo">
+          <a href="index.html">
+            <img src="BLACKONN 004_page-0001.png" alt="BLACKONN" />
+          </a>
+        </div>
+        <nav>
+          <a href="#dashboard"><i class="ri-dashboard-line"></i> Dashboard</a>
+          <a href="#products"><i class="ri-shopping-bag-line"></i> Products</a>
+          <a href="#orders"><i class="ri-file-list-3-line"></i> Orders</a>
+          <a href="#returns"><i class="ri-arrow-go-back-line"></i> Returns</a>
+          <a href="#users"><i class="ri-user-line"></i> Users</a>
+          <div class="notification-badge" id="messagesNotificationBadge">
+            <a href="#messages"><i class="ri-mail-line"></i> Messages</a>
+          </div>
+          <a href="#" class="logout-btn" onclick="logoutAdmin(); return false;"><i class="ri-logout-box-r-line"></i> Logout</a>
+        </nav>
+      </div>
+    </header>
+
+    <script src="assets/js/auth.js"></script>
+    <script>
+        // Initialize authentication
+        window.blackonnAuth = new BlackonnAuth();
+            // Auto-logout for admin after 30 minutes of inactivity
+            let lastAdminActivity = Date.now();
+            function resetAdminActivityTimer() {
+              lastAdminActivity = Date.now();
+            }
+            ['click','mousemove','keydown','scroll','touchstart'].forEach(evt => {
+              window.addEventListener(evt, resetAdminActivityTimer, true);
+            });
+            setInterval(() => {
+              if (Date.now() - lastAdminActivity > 24 * 60 * 60 * 1000) { // 24 hours
+                logoutAdmin();
+              }
+            }, 10000); // check every 10 seconds
+      (function enforceAdminAccess() {
+        const raw = localStorage.getItem('blackonn_admin_auth');
+        if (!raw) {
+          window.location.href = 'login.html';
+          return;
+        }
+        try {
+          const adminAuth = JSON.parse(raw);
+          if (!adminAuth || !adminAuth.loggedIn) {
+            throw new Error('invalid');
+          }
+        } catch (error) {
+          localStorage.removeItem('blackonn_admin_auth');
+          localStorage.removeItem('blackonn_user');
+          window.location.href = 'login.html';
+        }
+      })();
+      function logoutAdmin() {
+        localStorage.removeItem('blackonn_admin_auth');
+        localStorage.removeItem('blackonn_user');
+        window.location.href = 'login.html';
+      }
+    </script>
+
+    <main class="admin-page">
+      <section id="dashboard">
+        <div class="section-header">
+          <div class="section-header-left">
+            <h2><i class="ri-bar-chart-box-line"></i> Performance Insights</h2>
+            <small>Real-time overview of your store metrics</small>
+          </div>
+          <span class="pill" id="statsUpdated">Updated now</span>
+        </div>
+        <div class="stats-grid" id="statsGrid"></div>
+      </section>
+
+      <section id="products" class="admin-panel">
+        <div class="section-header">
+          <div class="section-header-left">
+            <h2><i class="ri-shopping-bag-line"></i> Product Management</h2>
+            <small>Upload images, set pricing, colors, sizes, and stock</small>
+          </div>
+        </div>
+
+        <!-- Low Stock Notification -->
+        <div id="lowStockNotification" class="low-stock-notification" style="display: none;">
+          <div class="notification-content">
+            <i class="ri-alert-line"></i>
+            <div class="notification-text">
+              <strong>Low Stock Alert</strong>
+              <p id="lowStockMessage">Some products are running low on inventory</p>
+            </div>
+            <button type="button" class="notification-close" onclick="this.parentElement.parentElement.style.display='none';">
+              <i class="ri-close-line"></i>
+            </button>
+          </div>
+        </div>
+
+        <form id="productForm">
+          <label>
+            Product Name
+            <input type="text" id="productName" required placeholder="E.g. Noir blazer" />
+          </label>
+          <label>
+            Price (₹)
+            <input type="number" id="productPrice" min="0" required placeholder="1499" />
+          </label>
+          <label>
+            Color
+            <select id="productColor" required>
+              <option value="ALL">ALL Colors</option>
+              <option value="Black">Black</option>
+              <option value="White">White</option>
+              <option value="Red">Red</option>
+              <option value="Blue">Blue</option>
+            </select>
+          </label>
+          <label>
+            Size
+            <select id="productSize" required>
+              <option value="ALL">ALL Sizes</option>
+              <option value="S">S</option>
+              <option value="M">M</option>
+              <option value="L">L</option>
+              <option value="XL">XL</option>
+            </select>
+          </label>
+          <label>
+            Description
+            <textarea id="productDescription" rows="3" placeholder="Describe the product features, materials, care instructions, etc."></textarea>
+          </label>
+          <label>
+            Inventory
+            <input type="number" id="productStock" min="0" required placeholder="20" />
+          </label>
+          <label>
+            Position (1-6)
+            <select id="productPosition">
+              <option value="">Not on Home Page</option>
+              <option value="1">1 - First Position</option>
+              <option value="2">2 - Second Position</option>
+              <option value="3">3 - Third Position</option>
+              <option value="4">4 - Fourth Position</option>
+              <option value="5">5 - Fifth Position</option>
+              <option value="6">6 - Sixth Position</option>
+            </select>
+            <span class="image-upload-hint">Select position to show on home page</span>
+          </label>
+          <div class="image-upload-group">
+            <label>
+              <i class="ri-image-line"></i> Main Image
+              <input type="file" id="productImage" accept="image/*" />
+              <span class="image-upload-hint">Primary product image (large view)</span>
+            </label>
+            <label>
+              <i class="ri-image-2-line"></i> Thumbnail Images
+              <input type="file" id="productThumb" accept="image/*" multiple />
+              <span class="image-upload-hint">Select multiple images for product gallery (hold Ctrl to select multiple)</span>
+            </label>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="primary" id="productSubmit">Add Product</button>
+            <button type="button" class="secondary" id="productReset">Reset</button>
+          </div>
+        </form>
+        <div id="productMessage" role="status"></div>
+
+        <!-- Product Search and Filters -->
+        <div class="search-container">
+          <div class="search-input-wrapper">
+            <i class="ri-search-line search-icon"></i>
+            <input type="text" id="productSearch" placeholder="Search products by name, description, or category..." class="search-input">
+            <button id="clearProductSearch" class="clear-search-btn" title="Clear search">
+              <i class="ri-close-line"></i>
+            </button>
+          </div>
+          <div class="filters-bar">
+            <div class="filter-group">
+              <label for="productCategoryFilter">Category:</label>
+              <select id="productCategoryFilter" class="filter-select">
+                <option value="">All Categories</option>
+                <option value="T-Shirts">T-Shirts</option>
+                <option value="Hoodies">Hoodies</option>
+                <option value="Accessories">Accessories</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table class="product-table">
+            <thead>
+              <tr>
+                <th>Position</th>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Color / Size</th>
+                <th>Inventory</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="productBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="orders" class="admin-panel">
+        <div class="section-header">
+          <div class="section-header-left">
+            <h2><i class="ri-file-list-3-line"></i> Orders Overview</h2>
+            <small>Complete order history with size, color, and location</small>
+          </div>
+          <div class="section-header-actions">
+            <div class="search-container">
+              <input type="text" id="orderSearch" placeholder="Search orders by ID, customer, or status..." />
+              <button id="clearSearch" title="Clear search">×</button>
+            </div>
+            <span class="refresh-indicator" id="ordersRefreshIndicator">
+              <i class="ri-refresh-line"></i>
+              <span id="ordersLastUpdate">--</span>
+            </span>
+            <label class="auto-refresh-toggle">
+              <input type="checkbox" id="ordersAutoRefresh" checked />
+              Auto-refresh
+            </label>
+            <button class="btn-export" id="exportOrdersBtn" title="Export orders to CSV">
+              <i class="ri-file-download-line"></i> Export
+            </button>
+            <button class="btn-export" id="refreshOrdersBtn" title="Refresh now">
+              <i class="ri-refresh-line"></i> Refresh
+            </button>
+          </div>
+        </div>
+
+        <div class="filters-bar">
+          <div class="filter-group">
+            <label>Status:</label>
+            <select id="statusFilter">
+              <option value="">All Statuses</option>
+              <option value="Pending">Pending</option>
+              <option value="Processing">Processing</option>
+              <option value="Shipped">Shipped</option>
+              <option value="Delivered">Delivered</option>
+              <option value="Cancelled">Cancelled</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label>Date:</label>
+            <select id="dateFilter">
+              <option value="">All Time</option>
+              <option value="today">Today</option>
+              <option value="week">This Week</option>
+              <option value="month">This Month</option>
+            </select>
+          </div>
+          <div class="bulk-actions">
+            <button id="selectAllBtn" class="btn-secondary">Select All</button>
+            <button id="bulkStatusBtn" class="btn-secondary" disabled>Bulk Update Status</button>
+            <button id="bulkDeleteBtn" class="btn-danger" disabled>Delete Selected</button>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table class="orders-table">
+            <thead>
+              <tr>
+                <th><input type="checkbox" id="selectAllOrders" /></th>
+                <th>Order #</th>
+                <th>Customer</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Items</th>
+                <th>Address</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="ordersBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="returns" class="admin-panel">
+        <div class="section-header">
+          <div class="section-header-left">
+            <h2><i class="ri-arrow-go-back-line"></i> Return Requests</h2>
+            <small>Manage customer return requests and process refunds</small>
+          </div>
+          <div class="section-header-actions">
+            <div class="search-container">
+              <input type="text" id="returnSearch" placeholder="Search returns by ID, order ID, or customer..." />
+              <button id="clearReturnSearch" title="Clear search">×</button>
+            </div>
+            <span class="refresh-indicator" id="returnsRefreshIndicator">
+              <i class="ri-refresh-line"></i>
+              <span id="returnsLastUpdate">--</span>
+            </span>
+            <label class="auto-refresh-toggle">
+              <input type="checkbox" id="returnsAutoRefresh" checked />
+              Auto-refresh
+            </label>
+            <button class="btn-export" id="exportReturnsBtn" title="Export returns to CSV">
+              <i class="ri-download-2-line"></i> Export
+            </button>
+            <button class="btn-export" id="refreshReturnsBtn" title="Refresh now">
+              <i class="ri-refresh-line"></i> Refresh
+            </button>
+          </div>
+        </div>
+
+        <div class="filters-bar">
+          <div class="filter-group">
+            <label>Status:</label>
+            <select id="returnStatusFilter">
+              <option value="">All Statuses</option>
+              <option value="Pending">Pending</option>
+              <option value="Approved">Approved</option>
+              <option value="Rejected">Rejected</option>
+              <option value="Processing">Processing</option>
+              <option value="Completed">Completed</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label>Reason:</label>
+            <select id="returnReasonFilter">
+              <option value="">All Reasons</option>
+              <option value="defective">Defective Product</option>
+              <option value="wrong_item">Wrong Item Received</option>
+              <option value="not_as_described">Not as Described</option>
+              <option value="size_issue">Size/Fit Issue</option>
+              <option value="color_issue">Color Issue</option>
+              <option value="changed_mind">Changed Mind</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="bulk-actions">
+            <button id="selectAllReturnsBtn" class="btn-secondary">Select All</button>
+            <button id="bulkReturnStatusBtn" class="btn-secondary" disabled>Bulk Update Status</button>
+            <button id="bulkReturnDeleteBtn" class="btn-danger" disabled>Delete Selected</button>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table class="returns-table">
+            <thead>
+              <tr>
+                <th><input type="checkbox" id="selectAllReturns" /></th>
+                <th>Return ID</th>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Items</th>
+                <th>Reason</th>
+                <th>Status</th>
+                <th>Requested</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="returnsBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="users" class="admin-panel">
+        <div class="section-header">
+          <div class="section-header-left">
+            <h2><i class="ri-user-line"></i> User Data & Export</h2>
+            <small>Download CSV with contact and registration info</small>
+          </div>
+          <div class="section-header-actions">
+            <span class="refresh-indicator" id="usersRefreshIndicator">
+              <i class="ri-refresh-line"></i>
+              <span id="usersLastUpdate">--</span>
+            </span>
+            <label class="auto-refresh-toggle">
+              <input type="checkbox" id="usersAutoRefresh" checked />
+              Auto-refresh
+            </label>
+            <button class="btn-export" id="refreshUsersBtn" title="Refresh now">
+              <i class="ri-refresh-line"></i> Refresh
+            </button>
+          </div>
+        </div>
+        <div class="users-section">
+          <!-- User Filters -->
+          <div class="search-container">
+            <div class="search-input-wrapper">
+              <i class="ri-search-line search-icon"></i>
+              <input type="text" id="userSearch" placeholder="Search users by name, email, or phone..." class="search-input">
+              <button id="clearUserSearch" class="clear-search-btn" title="Clear search">
+                <i class="ri-close-line"></i>
+              </button>
+            </div>
+            <div class="filters-bar">
+              <div class="filter-group">
+                <label for="userRoleFilter">Filter by Role:</label>
+                <select id="userRoleFilter" class="filter-select">
+                  <option value="">All Users</option>
+                  <option value="customer">Customers Only</option>
+                  <option value="admin">Admins Only</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <label for="userSortBy">Sort by:</label>
+                <select id="userSortBy" class="filter-select">
+                  <option value="newest">Newest First</option>
+                  <option value="oldest">Oldest First</option>
+                  <option value="name">Name A-Z</option>
+                  <option value="email">Email A-Z</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="info-row">
+            <div id="userCount"><i class="ri-group-line"></i> Users tracked: 0</div>
+            <div id="userStats" style="display:flex;gap:16px;flex-wrap:wrap;">
+              <span id="customerCount" style="color:#3730a3;background:linear-gradient(135deg,rgba(224,231,255,0.8),rgba(199,210,254,0.8));padding:8px 12px;border-radius:20px;border:1px solid #a5b4fc;">
+                <i class="ri-user-heart-line"></i> <strong>Customers: 0</strong>
+              </span>
+              <span id="adminCount" style="color:#92400e;background:linear-gradient(135deg,rgba(254,243,199,0.8),rgba(253,230,138,0.8));padding:8px 12px;border-radius:20px;border:1px solid #f59e0b;">
+                <i class="ri-admin-line"></i> <strong>Admins: 0</strong>
+              </span>
+            </div>
+            <button class="btn-export" id="downloadUsers"><i class="ri-download-2-line"></i> Download Users CSV</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Role</th>
+                  <th>Registered</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="usersBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contact Messages Section -->
+      <section id="messages" class="admin-panel">
+        <div class="panel-header">
+          <div class="section-header">
+            <div class="section-header-left">
+              <h2><i class="ri-mail-line"></i> Contact Messages</h2>
+              <small>View and manage contact form submissions from users</small>
+            </div>
+            <div class="section-header-right">
+              <button class="secondary" id="refreshMessagesBtn">
+                <i class="ri-refresh-line"></i> Refresh
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="table-responsive">
+            <table id="messagesTable">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Subject</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="messagesTableBody">
+                <!-- Messages will be loaded here -->
+              </tbody>
+            </table>
+            <div id="noMessagesMsg" class="empty-state">
+              <p><i class="ri-mail-unread-line"></i> No messages yet</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      // GitHub Pages: Using localStorage for data (read-only mode for products)
+      // Products are loaded from static data/products.json
+      
+      function getAdminToken() {
+        const auth = JSON.parse(localStorage.getItem('blackonn_admin_auth') || '{}');
+        return auth.token || '';
+      }
+
+      // Embedded products data (no fetch required - GitHub Pages compatible)
+      const EMBEDDED_PRODUCTS = [
+        { id: "prod-001", name: "Over Sized T-Shirt", price: 1499, color: "Black", size: "All", stock: 100, position: 1, image: "assets/img/new1.png", thumbImages: ["assets/img/new1.png", "assets/img/home1.png"] },
+        { id: "prod-002", name: "Slim Fit T-Shirt", price: 599, color: "Red and Blue", size: "All", stock: 150, position: 2, image: "assets/img/new2.png", thumbImages: ["assets/img/new2.png", "assets/img/home2.png"] },
+        { id: "prod-003", name: "CAP", price: 399, color: "Black", size: "All", stock: 200, position: 3, image: "assets/img/new3.png", thumbImages: ["assets/img/new3.png", "assets/img/collection1.png"] },
+        { id: "prod-004", name: "BAG", price: 1799, color: "Black", size: "One Size", stock: 75, position: 4, image: "assets/img/new4.png", thumbImages: ["assets/img/new4.png", "assets/img/collection2.png"] },
+        { id: "prod-005", name: "Hoodie", price: 1999, color: "Black", size: "All", stock: 80, position: 5, image: "assets/img/new5.png", thumbImages: ["assets/img/new5.png", "assets/img/home3.png"] },
+        { id: "prod-006", name: "Pants", price: 1299, color: "All", size: "All", stock: 120, position: 6, image: "assets/img/new6.png", thumbImages: ["assets/img/new6.png", "assets/img/product1.png"] }
+      ];
+
+      // Load products from embedded data (no fetch needed)
+      function loadStaticProducts() {
+        return EMBEDDED_PRODUCTS;
+      }
+
+      const statsGrid = document.getElementById('statsGrid');
+      const ordersBody = document.getElementById('ordersBody');
+      const productBody = document.getElementById('productBody');
+      const usersBody = document.getElementById('usersBody');
+      const returnsBody = document.getElementById('returnsBody');
+      const userCountLabel = document.getElementById('userCount');
+      const statsUpdatedEl = document.getElementById('statsUpdated');
+
+      let products = [];
+      let orders = [];
+      let users = [];
+      let returns = [];
+      let editingProductId = null;
+
+      // Fetch stats from localStorage
+      function fetchStats() {
+        const storedOrders = JSON.parse(localStorage.getItem('blackonn_orders') || '[]');
+        const storedUsers = JSON.parse(localStorage.getItem('blackonn_users') || '[]');
+        const storedReturns = JSON.parse(localStorage.getItem('blackonn_returns') || '[]');
+        const staticProducts = loadStaticProducts();
+        
+        const totalSales = storedOrders.reduce((sum, o) => sum + (o.total || 0), 0);
+        const pendingOrders = storedOrders.filter(o => o.status === 'Pending').length;
+        const pendingReturns = storedReturns.filter(r => r.status === 'Pending').length;
+        const inventoryValue = staticProducts.reduce((sum, p) => sum + ((p.price || 0) * (p.stock || 0)), 0);
+        
+        return [
+          { label: 'Total Sales', value: `₹${totalSales.toLocaleString()}` },
+          { label: 'Total Orders', value: storedOrders.length },
+          { label: 'Pending Orders', value: pendingOrders },
+          { label: 'Pending Returns', value: pendingReturns },
+          { label: 'Inventory Value', value: `₹${inventoryValue.toLocaleString()}` },
+          { label: 'Total Products', value: staticProducts.length },
+          { label: 'Registered Users', value: storedUsers.length }
+        ];
+      }
+
+      function renderStats() {
+        const stats = fetchStats();
+        const icons = {
+          'Total Sales': 'ri-money-dollar-circle-line',
+          'Total Orders': 'ri-shopping-cart-line',
+          'Pending Orders': 'ri-time-line',
+          'Pending Returns': 'ri-arrow-go-back-line',
+          'Inventory Value': 'ri-store-2-line',
+          'Total Products': 'ri-shopping-bag-line',
+          'Registered Users': 'ri-user-star-line'
+        };
+        statsGrid.innerHTML = stats
+          .map(stat => `
+            <article class="stat-card">
+              <small><i class="${icons[stat.label] || 'ri-bar-chart-line'}"></i> ${stat.label}</small>
+              <strong>${stat.value}</strong>
+            </article>
+          `)
+          .join('');
+        if (statsUpdatedEl) statsUpdatedEl.textContent = `Updated ${new Date().toLocaleTimeString()}`;
+      }
+
+      // Products - Load from localStorage or embedded data
+      function fetchProducts() {
+        // Try to load from localStorage first (admin modifications)
+        const storedProducts = JSON.parse(localStorage.getItem('blackonn_products') || 'null');
+        if (storedProducts && Array.isArray(storedProducts) && storedProducts.length > 0) {
+          products = storedProducts;
+        } else {
+          // Fall back to embedded data
+          products = loadStaticProducts();
+          // Save to localStorage for future modifications
+          localStorage.setItem('blackonn_products', JSON.stringify(products));
+        }
+        renderProducts();
+      }
+
+      function renderProducts() {
+        if (!products.length) {
+          productBody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:#9ca3af;"><i class="ri-inbox-line" style="font-size:2rem;display:block;margin-bottom:8px;"></i>No products added yet</td></tr>';
+          return;
+        }
+        productBody.innerHTML = products
+          .map(product => {
+            const positionBadge = product.position 
+              ? `<span class="position-badge">${product.position}</span>` 
+              : `<span class="position-badge empty">-</span>`;
+            // Handle both old thumbImage (string) and new thumbImages (array)
+            const thumbnails = product.thumbImages && product.thumbImages.length > 0 
+              ? product.thumbImages 
+              : (product.thumbImage ? [product.thumbImage] : [product.image || 'https://via.placeholder.com/36x36?text=Thumb']);
+            const thumbsHtml = thumbnails.slice(0, 3).map((thumb, i) => 
+              `<img src="${thumb}" alt="${product.name} thumb ${i+1}" title="Thumbnail ${i+1}" class="thumb-img" style="${i > 0 ? 'margin-left: -8px;' : ''}" />`
+            ).join('') + (thumbnails.length > 3 ? `<span class="more-thumbs">+${thumbnails.length - 3}</span>` : '');
+            return `
+            <tr>
+              <td data-label="Position">${positionBadge}</td>
+              <td data-label="Product">
+                <div class="product-label">
+                  <div class="product-images">
+                    <img src="${product.image || 'https://via.placeholder.com/56x56?text=Main'}" alt="${product.name}" title="Main Image" />
+                    <div class="thumbs-container">${thumbsHtml}</div>
+                  </div>
+                  <div>
+                    <strong>${product.name}</strong>
+                    <span class="product-id">ID: ${product.id.slice(0, 8)}...</span>
+                  </div>
+                </div>
+              </td>
+              <td data-label="Price"><strong>₹${(product.price || 0).toLocaleString()}</strong></td>
+              <td data-label="Color / Size"><span class="color-size-badge">${product.color || '-'} · ${product.size || '-'}</span></td>
+              <td data-label="Inventory"><span class="stock-badge ${(product.stock || 0) < 10 ? 'low-stock' : ''}">${product.stock || 0} units</span></td>
+              <td data-label="Actions" class="actions">
+                <button type="button" data-action="edit" data-id="${product.id}" aria-label="Edit" title="Edit product">
+                  <i class="ri-pencil-line"></i>
+                </button>
+                <button type="button" data-action="delete" data-id="${product.id}" aria-label="Delete" title="Delete product">
+                  <i class="ri-delete-bin-6-line"></i>
+                </button>
+              </td>
+            </tr>
+          `;
+          })
+          .join('');
+        
+        // Check and display low stock notification
+        checkAndDisplayLowStockNotification();
+      }
+
+      function checkAndDisplayLowStockNotification() {
+        const LOW_STOCK_THRESHOLD = 10;
+        const lowStockProducts = products.filter(p => (p.stock || 0) < LOW_STOCK_THRESHOLD && (p.stock || 0) > 0);
+        const outOfStockProducts = products.filter(p => (p.stock || 0) === 0);
+        
+        const notificationEl = document.getElementById('lowStockNotification');
+        const messageEl = document.getElementById('lowStockMessage');
+        
+        if (!notificationEl) return;
+        
+        if (lowStockProducts.length > 0 || outOfStockProducts.length > 0) {
+          let message = '';
+          if (outOfStockProducts.length > 0 && lowStockProducts.length > 0) {
+            message = `${outOfStockProducts.length} product(s) out of stock, ${lowStockProducts.length} product(s) low on stock`;
+          } else if (outOfStockProducts.length > 0) {
+            message = `${outOfStockProducts.length} product(s) out of stock`;
+          } else {
+            message = `${lowStockProducts.length} product(s) low on stock`;
+          }
+          messageEl.textContent = message;
+          notificationEl.style.display = 'block';
+        } else {
+          notificationEl.style.display = 'none';
+        }
+      }
+
+      // Orders - Real-time tracking
+      let ordersAutoRefreshInterval = null;
+      let usersAutoRefreshInterval = null;
+      const REFRESH_INTERVAL = 30000; // 30 seconds
+
+      function updateRefreshIndicator(type, loading = false) {
+        const indicator = document.getElementById(`${type}RefreshIndicator`);
+        const lastUpdate = document.getElementById(`${type}LastUpdate`);
+        if (indicator) {
+          indicator.classList.toggle('loading', loading);
+          indicator.classList.toggle('active', !loading);
+        }
+        if (lastUpdate && !loading) {
+          lastUpdate.textContent = new Date().toLocaleTimeString();
+        }
+      }
+
+      function getStatusBadgeClass(status) {
+        const statusMap = {
+          'Pending': 'status-pending',
+          'Processing': 'status-processing',
+          'Shipped': 'status-shipped',
+          'Delivered': 'status-delivered',
+          'Cancelled': 'status-cancelled'
+        };
+        return statusMap[status] || 'status-pending';
+      }
+
+      async function fetchOrders() {
+        updateRefreshIndicator('orders', true);
+        // Load orders from localStorage
+        orders = JSON.parse(localStorage.getItem('blackonn_orders') || '[]');
+        renderOrders();
+        updateRefreshIndicator('orders', false);
+      }
+
+      function renderOrders() {
+        if (!orders.length) {
+          ordersBody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:40px;color:#9ca3af;"><i class="ri-inbox-line" style="font-size:2rem;display:block;margin-bottom:8px;"></i>No orders yet</td></tr>';
+          return;
+        }
+        ordersBody.innerHTML = orders
+          .map(order => {
+            const dateStr = order.createdAt ? new Date(order.createdAt).toLocaleDateString() : '-';
+            const timeStr = order.createdAt ? new Date(order.createdAt).toLocaleTimeString() : '';
+            
+            // Build items detail
+            const itemsHtml = order.items?.map(i => 
+              `<div class="item">${i.name || 'Product'} <small>(${i.size || '-'}/${i.color || '-'}) x${i.quantity || 1}</small></div>`
+            ).join('') || '<div class="item">-</div>';
+            
+            // Build address
+            const addr = order.address || {};
+            const addressStr = [addr.street, addr.city, addr.state, addr.postal].filter(Boolean).join(', ') || '-';
+            
+            return `
+              <tr>
+                <td><input type="checkbox" class="order-checkbox" data-id="${order.id}" /></td>
+                <td data-label="Order #">
+                  <strong>${order.id}</strong>
+                  <div class="last-activity">${timeStr}</div>
+                </td>
+                <td data-label="Customer">
+                  <strong>${order.customer?.name || '-'}</strong>
+                  <div style="font-size:0.75rem;color:#6b7280;">${order.customer?.email || ''}</div>
+                  <div style="font-size:0.75rem;color:#9ca3af;">${order.customer?.phone || ''}</div>
+                </td>
+                <td data-label="Amount"><strong>₹${(order.total || order.amount || 0).toLocaleString()}</strong></td>
+                <td data-label="Date">${dateStr}</td>
+                <td data-label="Status">
+                  <select class="order-status" data-id="${order.id}">
+                    <option value="Pending" ${order.status === 'Pending' ? 'selected' : ''}>⏳ Pending</option>
+                    <option value="Processing" ${order.status === 'Processing' ? 'selected' : ''}>🔄 Processing</option>
+                    <option value="Shipped" ${order.status === 'Shipped' ? 'selected' : ''}>📦 Shipped</option>
+                    <option value="Delivered" ${order.status === 'Delivered' ? 'selected' : ''}>✅ Delivered</option>
+                    <option value="Cancelled" ${order.status === 'Cancelled' ? 'selected' : ''}>❌ Cancelled</option>
+                  </select>
+                </td>
+                <td data-label="Items">
+                  <div class="order-items-detail">${itemsHtml}</div>
+                </td>
+                <td data-label="Address">
+                  <div class="order-address" title="${addressStr}">${addressStr.length > 40 ? addressStr.slice(0, 40) + '...' : addressStr}</div>
+                </td>
+                <td data-label="Actions" class="actions">
+                  <button type="button" data-action="view-order" data-id="${order.id}" aria-label="View" title="View order details">
+                    <i class="ri-eye-line"></i>
+                  </button>
+                  <button type="button" data-action="delete-order" data-id="${order.id}" aria-label="Delete" title="Delete order">
+                    <i class="ri-delete-bin-6-line"></i>
+                  </button>
+                </td>
+              </tr>
+            `;
+          })
+          .join('');
+
+        // Attach status change handlers - update localStorage
+        document.querySelectorAll('.order-status').forEach(select => {
+          select.addEventListener('change', (e) => {
+            const orderId = e.target.dataset.id;
+            const newStatus = e.target.value;
+            // Update order in localStorage
+            const storedOrders = JSON.parse(localStorage.getItem('blackonn_orders') || '[]');
+            const orderIdx = storedOrders.findIndex(o => o.id === orderId);
+            if (orderIdx !== -1) {
+              storedOrders[orderIdx].status = newStatus;
+              localStorage.setItem('blackonn_orders', JSON.stringify(storedOrders));
+              orders = storedOrders;
+              renderStats();
+            }
+          });
+        });
+
+        // Attach order action handlers
+        document.querySelectorAll('[data-action="view-order"]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const orderId = btn.dataset.id;
+            const order = orders.find(o => o.id === orderId);
+            if (order) {
+              const details = `
+Order ID: ${order.id}
+Status: ${order.status}
+Date: ${order.createdAt ? new Date(order.createdAt).toLocaleString() : '-'}
+
+Customer:
+  Name: ${order.customer?.name || '-'}
+  Email: ${order.customer?.email || '-'}
+  Phone: ${order.customer?.phone || '-'}
+
+Items:
+${order.items?.map(i => `  - ${i.name} (${i.size}/${i.color}) x${i.quantity} = ₹${(i.price * i.quantity).toLocaleString()}`).join('\n') || '  No items'}
+
+Address:
+  ${order.address?.street || '-'}
+  ${order.address?.city || ''} ${order.address?.state || ''} ${order.address?.postal || ''}
+
+Amount: ₹${(order.amount || 0).toLocaleString()}
+Payment: ${order.paymentMethod || 'COD'} ${order.paymentStatus === 'paid' ? '(Paid)' : '(Pending)'}
+              `;
+              alert(details);
+            }
+          });
+        });
+
+        document.querySelectorAll('[data-action="delete-order"]').forEach(btn => {
+          btn.addEventListener('click', async () => {
+            const orderId = btn.dataset.id;
+            if (!confirm(`Delete order ${orderId}? This cannot be undone.`)) return;
+            // Delete from localStorage
+            const storedOrders = JSON.parse(localStorage.getItem('blackonn_orders') || '[]');
+            const filtered = storedOrders.filter(o => o.id !== orderId);
+            localStorage.setItem('blackonn_orders', JSON.stringify(filtered));
+            await fetchOrders();
+            await renderStats();
+          });
+        });
+      }
+
+      // Returns table rendering
+      function renderReturnsTable(returnsList) {
+        if (!returnsList || !returnsList.length) {
+          returnsBody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:40px;color:#9ca3af;"><i class="ri-inbox-line" style="font-size:2rem;display:block;margin-bottom:8px;"></i>No returns yet</td></tr>';
+          return;
+        }
+
+        returnsBody.innerHTML = returnsList
+          .map(ret => {
+            const dateStr = ret.requestedAt ? new Date(ret.requestedAt).toLocaleDateString() : '-';
+            const timeStr = ret.requestedAt ? new Date(ret.requestedAt).toLocaleTimeString() : '';
+
+            const itemsHtml = ret.items?.map(i =>
+              `<div class="item">${i.name || 'Product'} <small>(${i.size || '-'}/${i.color || '-'}) x${i.quantity || 1}</small></div>`
+            ).join('') || '<div class="item">-</div>';
+
+            const cust = ret.customer || {};
+            const customerHtml = `<strong>${cust.name || '-'}</strong><div style="font-size:0.75rem;color:#6b7280;">${cust.email || ''}</div><div style="font-size:0.75rem;color:#9ca3af;">${cust.phone || ''}</div>`;
+
+            const reason = ret.reason || ret.reasonText || '-';
+            const status = ret.status || 'Pending';
+
+            return `
+              <tr>
+                <td><input type="checkbox" class="return-checkbox" data-id="${ret.id}" /></td>
+                <td data-label="Return ID">
+                  <strong>${ret.id}</strong>
+                  <div class="last-activity">${timeStr}</div>
+                </td>
+                <td data-label="Order ID"><strong>${ret.orderId || '-'}</strong></td>
+                <td data-label="Customer">${customerHtml}</td>
+                <td data-label="Items">
+                  <div class="order-items-detail">${itemsHtml}</div>
+                </td>
+                <td data-label="Reason">${reason}</td>
+                <td data-label="Status">
+                  <select class="return-status" data-id="${ret.id}">
+                    <option value="Pending" ${status === 'Pending' ? 'selected' : ''}>⏳ Pending</option>
+                    <option value="Approved" ${status === 'Approved' ? 'selected' : ''}>✅ Approved</option>
+                    <option value="Rejected" ${status === 'Rejected' ? 'selected' : ''}>❌ Rejected</option>
+                    <option value="Processing" ${status === 'Processing' ? 'selected' : ''}>🔄 Processing</option>
+                    <option value="Completed" ${status === 'Completed' ? 'selected' : ''}>🏁 Completed</option>
+                  </select>
+                </td>
+                <td data-label="Requested">${dateStr}</td>
+                <td data-label="Actions" class="actions">
+                  <button type="button" data-action="view-return" data-id="${ret.id}" aria-label="View" title="View return details">
+                    <i class="ri-eye-line"></i>
+                  </button>
+                  <button type="button" data-action="delete-return" data-id="${ret.id}" aria-label="Delete" title="Delete return">
+                    <i class="ri-delete-bin-6-line"></i>
+                  </button>
+                </td>
+              </tr>
+            `;
+          })
+          .join('');
+
+        // Attach status change handlers
+        document.querySelectorAll('.return-status').forEach(select => {
+          select.addEventListener('change', (e) => {
+            const returnId = e.target.dataset.id;
+            const newStatus = e.target.value;
+            const storedReturns = JSON.parse(localStorage.getItem('blackonn_returns') || '[]');
+            const idx = storedReturns.findIndex(r => r.id === returnId);
+            if (idx !== -1) {
+              storedReturns[idx].status = newStatus;
+              localStorage.setItem('blackonn_returns', JSON.stringify(storedReturns));
+              returns = storedReturns;
+              renderStats();
+            }
+          });
+        });
+
+        // Attach view/delete handlers
+        document.querySelectorAll('[data-action="view-return"]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const returnId = btn.dataset.id;
+            const r = returns.find(x => x.id === returnId);
+            if (r) {
+              const details = `Return ID: ${r.id}\nOrder ID: ${r.orderId || '-'}\nStatus: ${r.status || '-'}\nRequested: ${r.requestedAt ? new Date(r.requestedAt).toLocaleString() : '-'}\n\nCustomer:\n  Name: ${r.customer?.name || '-'}\n  Email: ${r.customer?.email || '-'}\n  Phone: ${r.customer?.phone || '-'}\n\nItems:\n${r.items?.map(i => `  - ${i.name} (${i.size || '-'}/${i.color || '-'}) x${i.quantity || 1} = ₹${((i.price||0) * (i.quantity||1)).toLocaleString()}`).join('\n') || '  No items'}\n\nReason:\n  ${r.reason || r.reasonText || '-'}\n\nComments:\n  ${r.comments || '-'} `;
+              alert(details);
+            }
+          });
+        });
+
+        document.querySelectorAll('[data-action="delete-return"]').forEach(btn => {
+          btn.addEventListener('click', async () => {
+            const returnId = btn.dataset.id;
+            if (!confirm(`Delete return ${returnId}? This cannot be undone.`)) return;
+            const storedReturns = JSON.parse(localStorage.getItem('blackonn_returns') || '[]');
+            const filtered = storedReturns.filter(r => r.id !== returnId);
+            localStorage.setItem('blackonn_returns', JSON.stringify(filtered));
+            await fetchReturns();
+            await renderStats();
+          });
+        });
+      }
+
+      // Users - Real-time tracking from localStorage
+      async function fetchUsers() {
+        updateRefreshIndicator('users', true);
+        // Load users from localStorage
+        users = JSON.parse(localStorage.getItem('blackonn_users') || '[]');
+        renderUsers();
+        updateRefreshIndicator('users', false);
+      }
+
+      function renderUsers() {
+        const customerCountEl = document.getElementById('customerCount');
+        const adminCountEl = document.getElementById('adminCount');
+        const roleFilter = document.getElementById('userRoleFilter')?.value || '';
+        const sortBy = document.getElementById('userSortBy')?.value || 'newest';
+        const searchTerm = document.getElementById('userSearch')?.value.toLowerCase() || '';
+
+        // Filter users
+        let filteredUsers = users.filter(user => {
+          // Role filter
+          if (roleFilter && user.role !== roleFilter) {
+            return false;
+          }
+
+          // Search filter
+          if (searchTerm) {
+            const name = (user.name || '').toLowerCase();
+            const email = (user.email || '').toLowerCase();
+            const phone = (user.phone || '').toLowerCase();
+
+            if (!name.includes(searchTerm) && !email.includes(searchTerm) && !phone.includes(searchTerm)) {
+              return false;
+            }
+          }
+
+          return true;
+        });
+
+        if (!filteredUsers.length) {
+          const hasFilters = roleFilter || searchTerm;
+          const message = hasFilters
+            ? 'No users found matching your search and filter criteria'
+            : 'No users registered yet';
+          const icon = hasFilters ? 'ri-search-line' : 'ri-user-unfollow-line';
+          usersBody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:40px;color:#9ca3af;"><i class="${icon}" style="font-size:2rem;display:block;margin-bottom:8px;"></i>${message}</td></tr>`;
+          return;
+        }
+
+        // Sort users
+        filteredUsers.sort((a, b) => {
+          switch (sortBy) {
+            case 'oldest':
+              return new Date(a.createdAt || 0) - new Date(b.createdAt || 0);
+            case 'name':
+              return (a.name || '').localeCompare(b.name || '');
+            case 'email':
+              return (a.email || '').localeCompare(b.email || '');
+            case 'newest':
+            default:
+              return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
+          }
+        });
+
+        const customers = users.filter(u => u.role !== 'admin');
+        const admins = users.filter(u => u.role === 'admin');
+
+        usersBody.innerHTML = filteredUsers
+          .map(user => {
+            const isAdmin = user.role === 'admin';
+            const roleClass = isAdmin ? 'user-role-admin' : 'user-role-customer';
+            const rowClass = isAdmin ? 'user-row-admin' : 'user-row-customer';
+            const roleIcon = isAdmin ? 'ri-admin-line' : 'ri-user-heart-line';
+            const roleText = isAdmin ? 'Admin' : 'Customer';
+            const registeredDate = user.createdAt ? new Date(user.createdAt) : null;
+            const dateStr = registeredDate ? registeredDate.toLocaleDateString() : '-';
+            const timeStr = registeredDate ? registeredDate.toLocaleTimeString() : '';
+
+            return `
+              <tr class="${rowClass}">
+                <td data-label="Name">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <i class="${roleIcon}" style="font-size: 1.1rem; color: ${isAdmin ? '#92400e' : '#3730a3'};"></i>
+                    <strong>${user.name || '-'}</strong>
+                  </div>
+                </td>
+                <td data-label="Email">${user.email || '-'}</td>
+                <td data-label="Phone">${user.phone || '-'}</td>
+                <td data-label="Role">
+                  <span class="user-role-badge ${roleClass}">
+                    <i class="${roleIcon}"></i>
+                    ${roleText}
+                  </span>
+                </td>
+                <td data-label="Registered">
+                  ${dateStr}
+                  <div class="last-activity">${timeStr}</div>
+                </td>
+                <td data-label="Actions" class="actions">
+                  <button type="button" data-action="view-user" data-id="${user.id}" aria-label="View ${roleText}" title="View ${roleText} details">
+                    <i class="ri-eye-line"></i>
+                  </button>
+                  ${isAdmin ? `
+                    <button type="button" data-action="edit-user-role" data-id="${user.id}" aria-label="Change Role" title="Change user role">
+                      <i class="ri-edit-line"></i>
+                    </button>
+                  ` : `
+                    <button type="button" data-action="promote-user" data-id="${user.id}" aria-label="Promote to Admin" title="Promote to admin">
+                      <i class="ri-admin-line"></i>
+                    </button>
+                  `}
+                </td>
+              </tr>
+            `;
+          })
+          .join('');
+
+        userCountLabel.innerHTML = `<i class="ri-group-line"></i> Users tracked: ${users.length}`;
+        if (customerCountEl) customerCountEl.innerHTML = `<i class="ri-user-heart-line"></i> Customers: ${customers.length}`;
+        if (adminCountEl) adminCountEl.innerHTML = `<i class="ri-admin-line"></i> Admins: ${admins.length}`;
+
+        // Attach view user handlers
+        document.querySelectorAll('[data-action="view-user"]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const userId = btn.dataset.id;
+            const user = users.find(u => u.id === userId);
+            if (user) {
+              const isAdmin = user.role === 'admin';
+              const roleIcon = isAdmin ? '👑' : '👤';
+              const roleText = isAdmin ? 'Administrator' : 'Customer';
+              const details = `
+${roleIcon} ${roleText} Details
+
+User ID: ${user.id}
+Name: ${user.name || '-'}
+Email: ${user.email || '-'}
+Phone: ${user.phone || '-'}
+Role: ${roleText}
+Registered: ${user.createdAt ? new Date(user.createdAt).toLocaleString() : '-'}
+Last Login: ${user.lastLogin ? new Date(user.lastLogin).toLocaleString() : 'Never'}
+              `;
+              showModal(`${roleText} Details`, `<pre style="white-space: pre-wrap; font-family: inherit; margin: 0; background: ${isAdmin ? '#fef3c7' : '#e0e7ff'}; padding: 16px; border-radius: 8px;">${details}</pre>`);
+            }
+          });
+        });
+
+        // Attach promote user handlers
+        document.querySelectorAll('[data-action="promote-user"]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const userId = btn.dataset.id;
+            const user = users.find(u => u.id === userId);
+            if (user) {
+              showModal(
+                'Promote to Admin',
+                `Are you sure you want to promote "${user.name}" to administrator? This will give them full access to the admin panel.`,
+                () => {
+                  // Update user role
+                  const storedUsers = JSON.parse(localStorage.getItem('blackonn_users') || '[]');
+                  const userIdx = storedUsers.findIndex(u => u.id === userId);
+                  if (userIdx !== -1) {
+                    storedUsers[userIdx].role = 'admin';
+                    localStorage.setItem('blackonn_users', JSON.stringify(storedUsers));
+                    fetchUsers();
+                    renderStats();
+                  }
+                  closeModal();
+                }
+              );
+            }
+          });
+        });
+
+        // Attach edit user role handlers
+        document.querySelectorAll('[data-action="edit-user-role"]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const userId = btn.dataset.id;
+            const user = users.find(u => u.id === userId);
+            if (user) {
+              const roleOptions = `
+                <select id="newUserRole" style="padding: 8px; border: 1px solid #d1d5db; border-radius: 6px; margin-top: 10px;">
+                  <option value="customer" ${user.role !== 'admin' ? 'selected' : ''}>Customer</option>
+                  <option value="admin" ${user.role === 'admin' ? 'selected' : ''}>Administrator</option>
+                </select>
+              `;
+
+              showModal(
+                `Change Role for ${user.name}`,
+                `Select new role for ${user.name}:${roleOptions}`,
+                () => {
+                  const newRole = document.getElementById('newUserRole').value;
+                  // Update user role
+                  const storedUsers = JSON.parse(localStorage.getItem('blackonn_users') || '[]');
+                  const userIdx = storedUsers.findIndex(u => u.id === userId);
+                  if (userIdx !== -1) {
+                    storedUsers[userIdx].role = newRole;
+                    localStorage.setItem('blackonn_users', JSON.stringify(storedUsers));
+                    fetchUsers();
+                    renderStats();
+                  }
+                  closeModal();
+                }
+              );
+            }
+          });
+        });
+      }
+
+      // Auto-refresh setup
+      function setupAutoRefresh() {
+        const ordersAutoRefreshCheckbox = document.getElementById('ordersAutoRefresh');
+        const usersAutoRefreshCheckbox = document.getElementById('usersAutoRefresh');
+        const returnsAutoRefreshCheckbox = document.getElementById('returnsAutoRefresh');
+        const refreshOrdersBtn = document.getElementById('refreshOrdersBtn');
+        const refreshUsersBtn = document.getElementById('refreshUsersBtn');
+        const refreshReturnsBtn = document.getElementById('refreshReturnsBtn');
+
+        // Orders auto-refresh
+        if (ordersAutoRefreshCheckbox) {
+          ordersAutoRefreshCheckbox.addEventListener('change', (e) => {
+            if (e.target.checked) {
+              ordersAutoRefreshInterval = setInterval(fetchOrders, REFRESH_INTERVAL);
+            } else {
+              clearInterval(ordersAutoRefreshInterval);
+            }
+          });
+          // Start auto-refresh by default
+          ordersAutoRefreshInterval = setInterval(fetchOrders, REFRESH_INTERVAL);
+        }
+
+        // Users auto-refresh
+        if (usersAutoRefreshCheckbox) {
+          usersAutoRefreshCheckbox.addEventListener('change', (e) => {
+            if (e.target.checked) {
+              usersAutoRefreshInterval = setInterval(fetchUsers, REFRESH_INTERVAL);
+            } else {
+              clearInterval(usersAutoRefreshInterval);
+            }
+          });
+          // Start auto-refresh by default
+          usersAutoRefreshInterval = setInterval(fetchUsers, REFRESH_INTERVAL);
+        }
+
+        // Returns auto-refresh
+        if (returnsAutoRefreshCheckbox) {
+          returnsAutoRefreshCheckbox.addEventListener('change', (e) => {
+            if (e.target.checked) {
+              returnsAutoRefreshInterval = setInterval(fetchReturns, RETURNS_REFRESH_INTERVAL);
+            } else {
+              clearInterval(returnsAutoRefreshInterval);
+            }
+          });
+          // Start auto-refresh by default
+          returnsAutoRefreshInterval = setInterval(fetchReturns, RETURNS_REFRESH_INTERVAL);
+        }
+
+        // Manual refresh buttons
+        if (refreshOrdersBtn) {
+          refreshOrdersBtn.addEventListener('click', fetchOrders);
+        }
+        if (refreshUsersBtn) {
+          refreshUsersBtn.addEventListener('click', fetchUsers);
+        }
+        if (refreshReturnsBtn) {
+          refreshReturnsBtn.addEventListener('click', fetchReturns);
+        }
+      }
+
+      function readImageFile(file) {
+        return new Promise((resolve) => {
+          if (!file) return resolve('');
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = () => resolve('');
+          reader.readAsDataURL(file);
+        });
+      }
+
+      // Read multiple image files and return array of base64 strings
+      async function readMultipleImageFiles(fileList) {
+        if (!fileList || fileList.length === 0) return [];
+        const promises = Array.from(fileList).map(file => readImageFile(file));
+        return Promise.all(promises);
+      }
+
+      function attachProductHandlers() {
+        const form = document.getElementById('productForm');
+        const reset = document.getElementById('productReset');
+        const message = document.getElementById('productMessage');
+        const submit = document.getElementById('productSubmit');
+
+        form.addEventListener('submit', async (event) => {
+          event.preventDefault();
+          const name = document.getElementById('productName').value.trim();
+          const price = Number(document.getElementById('productPrice').value);
+          const color = document.getElementById('productColor').value.trim();
+          const size = document.getElementById('productSize').value;
+          const description = document.getElementById('productDescription').value.trim();
+          const stock = Number(document.getElementById('productStock').value);
+          const position = document.getElementById('productPosition').value;
+          const mainFile = document.getElementById('productImage').files[0];
+          const thumbFiles = document.getElementById('productThumb').files;
+          const image = await readImageFile(mainFile);
+          const thumbImages = await readMultipleImageFiles(thumbFiles);
+
+          if (!name || !price) {
+            message.textContent = 'Name and price are required.';
+            message.style.color = '#d02626';
+            return;
+          }
+
+          // Save product changes to localStorage for persistence
+          message.textContent = 'Product changes saved successfully!';
+          message.style.color = '#10b981';
+          
+          if (editingProductId) {
+            // Update product in local array
+            const productIdx = products.findIndex(p => p.id === editingProductId);
+            if (productIdx !== -1) {
+              products[productIdx] = { 
+                ...products[productIdx], 
+                name, price, color, size, description, stock, 
+                position: position || null,
+                image: image || products[productIdx].image,
+                thumbImages: thumbImages.length > 0 ? thumbImages : products[productIdx].thumbImages
+              };
+            }
+            message.textContent = `${name} updated successfully!`;
+            editingProductId = null;
+            submit.textContent = 'Add Product';
+          } else {
+            // Add new product to local array
+            const newProduct = {
+              id: 'prod-' + Date.now(),
+              name, price, color, size, description, stock, 
+              position: position || null,
+              image: image || '',
+              thumbImages: thumbImages
+            };
+            products.push(newProduct);
+            message.textContent = `${name} added successfully!`;
+          }
+          
+          // Save updated products to localStorage
+          localStorage.setItem('blackonn_products', JSON.stringify(products));
+          
+          form.reset();
+          renderProducts();
+          await renderStats();
+          setTimeout(() => (message.textContent = ''), 5000);
+        });
+
+        reset.addEventListener('click', () => {
+          editingProductId = null;
+          submit.textContent = 'Add Product';
+          form.reset();
+          message.textContent = '';
+        });
+
+        productBody.addEventListener('click', async (event) => {
+          const target = event.target.closest('button');
+          if (!target) return;
+          const action = target.dataset.action;
+          const id = target.dataset.id;
+
+          if (action === 'delete') {
+            if (!confirm('Delete this product? This action cannot be undone.')) return;
+            // Remove from local array
+            products = products.filter(p => p.id !== id);
+            // Save updated products to localStorage
+            localStorage.setItem('blackonn_products', JSON.stringify(products));
+            renderProducts();
+            await renderStats();
+            return;
+          }
+
+          if (action === 'edit') {
+            const product = products.find(p => p.id === id);
+            if (!product) return;
+            editingProductId = product.id;
+            document.getElementById('productName').value = product.name || '';
+            document.getElementById('productPrice').value = product.price || '';
+            document.getElementById('productColor').value = product.color || '';
+            document.getElementById('productSize').value = product.size || 'M';
+            document.getElementById('productDescription').value = product.description || '';
+            document.getElementById('productStock').value = product.stock || 0;
+            document.getElementById('productPosition').value = product.position || '';
+            submit.textContent = 'Save Changes';
+            message.textContent = `Editing ${product.name}. Upload new images to replace.`;
+            message.style.color = '#0f172a';
+            window.scrollTo({ top: document.getElementById('products').offsetTop - 100, behavior: 'smooth' });
+          }
+        });
+      }
+
+      function handleDownload() {
+        const button = document.getElementById('downloadUsers');
+        button.addEventListener('click', () => {
+          // Export users from localStorage
+          const storedUsers = JSON.parse(localStorage.getItem('blackonn_users') || '[]');
+          if (!storedUsers.length) {
+            alert('No users to export');
+            return;
+          }
+          // Create CSV
+          const headers = ['Name', 'Email', 'Phone', 'Role', 'Registered'];
+          const rows = storedUsers.map(u => [
+            u.name || '',
+            u.email || '',
+            u.phone || '',
+            u.role || 'customer',
+            u.createdAt || ''
+          ]);
+          const csv = [headers, ...rows].map(row => row.join(',')).join('\n');
+          const blob = new Blob([csv], { type: 'text/csv' });
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = `blackonn-users-${new Date().toISOString().slice(0, 10)}.csv`;
+          link.click();
+          URL.revokeObjectURL(url);
+        });
+      }
+
+      // Returns - Real-time tracking
+      let returnsAutoRefreshInterval = null;
+      const RETURNS_REFRESH_INTERVAL = 30000; // 30 seconds
+
+      function updateReturnsRefreshIndicator(type, loading = false) {
+        const indicator = document.getElementById(`${type}RefreshIndicator`);
+        const lastUpdate = document.getElementById(`${type}LastUpdate`);
+        if (indicator) {
+          indicator.classList.toggle('loading', loading);
+          indicator.classList.toggle('active', !loading);
+        }
+        if (lastUpdate && !loading) {
+          lastUpdate.textContent = new Date().toLocaleTimeString();
+        }
+      }
+
+      function getReturnStatusBadgeClass(status) {
+        const statusMap = {
+          'Pending': 'return-status-pending',
+          'Approved': 'return-status-approved',
+          'Rejected': 'return-status-rejected',
+          'Processing': 'return-status-processing',
+          'Completed': 'return-status-completed'
+        };
+        return statusMap[status] || 'return-status-pending';
+      }
+
+      async function fetchReturns() {
+        updateReturnsRefreshIndicator('returns', true);
+        // Load returns from localStorage
+        returns = JSON.parse(localStorage.getItem('blackonn_returns') || '[]');
+        renderReturns();
+        updateReturnsRefreshIndicator('returns', false);
+      }
+
+      function renderReturns() {
+        renderReturnsTable(returns);
+      }
+
+      // Initialize dashboard
+      function initDashboard() {
+        renderStats();
+        fetchProducts();
+        fetchOrders();
+        fetchUsers();
+        fetchReturns();
+        attachProductHandlers();
+        handleDownload();
+        setupAutoRefresh();
+      }
+
+      initDashboard();
+    </script>
+    <script>
+      document.addEventListener('contextmenu', function (e) {
+      e.preventDefault();
+      });
+    </script>
+
+    <!-- Enhanced Modal -->
+    <div id="adminModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 id="modalTitle">Confirm Action</h3>
+          <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body" id="modalBody">
+          Are you sure you want to perform this action?
+        </div>
+        <div class="modal-footer">
+          <button class="secondary" onclick="closeModal()">Cancel</button>
+          <button class="primary" id="modalConfirmBtn">Confirm</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+      <button class="quick-action-btn" onclick="scrollToTop()" title="Scroll to Top">
+        <i class="ri-arrow-up-line"></i>
+      </button>
+      <button class="quick-action-btn" onclick="showSection('dashboard')" title="Dashboard">
+        <i class="ri-dashboard-line"></i>
+      </button>
+      <button class="quick-action-btn" onclick="showSection('products')" title="Products">
+        <i class="ri-shopping-bag-line"></i>
+      </button>
+      <button class="quick-action-btn" onclick="showSection('orders')" title="Orders">
+        <i class="ri-file-list-line"></i>
+      </button>
+      <button class="quick-action-btn" onclick="showSection('returns')" title="Returns">
+        <i class="ri-arrow-go-back-line"></i>
+      </button>
+    </div>
+
+    <script>
+      // Enhanced Admin Functionality
+
+      // Modal functions
+      function showModal(title, body, confirmCallback) {
+        document.getElementById('modalTitle').textContent = title;
+        document.getElementById('modalBody').innerHTML = body;
+        document.getElementById('modalConfirmBtn').onclick = confirmCallback;
+        document.getElementById('adminModal').classList.add('show');
+      }
+
+      function closeModal() {
+        document.getElementById('adminModal').classList.remove('show');
+      }
+
+      // Search and Filter functionality
+      let currentFilters = {
+        search: '',
+        status: '',
+        date: ''
+      };
+
+      function initializeSearchAndFilters() {
+        const searchInput = document.getElementById('orderSearch');
+        const clearSearchBtn = document.getElementById('clearSearch');
+        const statusFilter = document.getElementById('statusFilter');
+        const dateFilter = document.getElementById('dateFilter');
+
+        // Search functionality
+        searchInput.addEventListener('input', debounce(() => {
+          currentFilters.search = searchInput.value.toLowerCase();
+          renderFilteredOrders();
+        }, 300));
+
+        clearSearchBtn.addEventListener('click', () => {
+          searchInput.value = '';
+          currentFilters.search = '';
+          renderFilteredOrders();
+        });
+
+        // Filter functionality
+        statusFilter.addEventListener('change', () => {
+          currentFilters.status = statusFilter.value;
+          renderFilteredOrders();
+        });
+
+        dateFilter.addEventListener('change', () => {
+          currentFilters.date = dateFilter.value;
+          renderFilteredOrders();
+        });
+      }
+
+      function renderFilteredOrders() {
+        const filteredOrders = orders.filter(order => {
+          // Search filter
+          if (currentFilters.search) {
+            const searchTerm = currentFilters.search;
+            const matchesSearch =
+              order.id.toLowerCase().includes(searchTerm) ||
+              (order.customer?.name || '').toLowerCase().includes(searchTerm) ||
+              (order.customer?.email || '').toLowerCase().includes(searchTerm) ||
+              (order.status || '').toLowerCase().includes(searchTerm);
+            if (!matchesSearch) return false;
+          }
+
+          // Status filter
+          if (currentFilters.status && order.status !== currentFilters.status) {
+            return false;
+          }
+
+          // Date filter
+          if (currentFilters.date) {
+            const orderDate = new Date(order.createdAt || 0);
+            const now = new Date();
+            let dateMatch = false;
+
+            switch (currentFilters.date) {
+              case 'today':
+                dateMatch = orderDate.toDateString() === now.toDateString();
+                break;
+              case 'week':
+                const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+                dateMatch = orderDate >= weekAgo;
+                break;
+              case 'month':
+                const monthAgo = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
+                dateMatch = orderDate >= monthAgo;
+                break;
+            }
+            if (!dateMatch) return false;
+          }
+
+          return true;
+        });
+
+        renderOrdersTable(filteredOrders);
+      }
+
+      // Bulk actions functionality
+      let selectedOrders = new Set();
+
+      function initializeBulkActions() {
+        const selectAllCheckbox = document.getElementById('selectAllOrders');
+        const selectAllBtn = document.getElementById('selectAllBtn');
+        const bulkStatusBtn = document.getElementById('bulkStatusBtn');
+        const bulkDeleteBtn = document.getElementById('bulkDeleteBtn');
+
+        selectAllCheckbox.addEventListener('change', () => {
+          const checkboxes = document.querySelectorAll('.order-checkbox');
+          checkboxes.forEach(cb => {
+            cb.checked = selectAllCheckbox.checked;
+            updateOrderSelection(cb.dataset.id, cb.checked);
+          });
+          updateBulkActionsState();
+        });
+
+        selectAllBtn.addEventListener('click', () => {
+          const allCheckboxes = document.querySelectorAll('.order-checkbox');
+          const allSelected = selectedOrders.size === allCheckboxes.length;
+          const newState = !allSelected;
+
+          allCheckboxes.forEach(cb => {
+            cb.checked = newState;
+            updateOrderSelection(cb.dataset.id, newState);
+          });
+          selectAllCheckbox.checked = newState;
+          updateBulkActionsState();
+        });
+
+        bulkStatusBtn.addEventListener('click', () => {
+          if (selectedOrders.size === 0) return;
+
+          const statusOptions = `
+            <select id="bulkStatusSelect" style="padding: 8px; border: 1px solid #d1d5db; border-radius: 6px; margin-top: 10px;">
+              <option value="Processing">Processing</option>
+              <option value="Shipped">Shipped</option>
+              <option value="Delivered">Delivered</option>
+              <option value="Cancelled">Cancelled</option>
+            </select>
+          `;
+
+          showModal(
+            `Update ${selectedOrders.size} Order${selectedOrders.size > 1 ? 's' : ''}`,
+            `Select new status for ${selectedOrders.size} selected order${selectedOrders.size > 1 ? 's' : ''}: ${statusOptions}`,
+            () => {
+              const newStatus = document.getElementById('bulkStatusSelect').value;
+              bulkUpdateStatus(newStatus);
+              closeModal();
+            }
+          );
+        });
+
+        bulkDeleteBtn.addEventListener('click', () => {
+          if (selectedOrders.size === 0) return;
+
+          showModal(
+            `Delete ${selectedOrders.size} Order${selectedOrders.size > 1 ? 's' : ''}`,
+            `Are you sure you want to delete ${selectedOrders.size} selected order${selectedOrders.size > 1 ? 's' : ''}? This action cannot be undone.`,
+            () => {
+              bulkDeleteOrders();
+              closeModal();
+            }
+          );
+        });
+      }
+
+      function updateOrderSelection(orderId, selected) {
+        if (selected) {
+          selectedOrders.add(orderId);
+        } else {
+          selectedOrders.delete(orderId);
+        }
+        updateBulkActionsState();
+      }
+
+      function updateBulkActionsState() {
+        const bulkStatusBtn = document.getElementById('bulkStatusBtn');
+        const bulkDeleteBtn = document.getElementById('bulkDeleteBtn');
+
+        const hasSelection = selectedOrders.size > 0;
+        bulkStatusBtn.disabled = !hasSelection;
+        bulkDeleteBtn.disabled = !hasSelection;
+
+        bulkStatusBtn.textContent = hasSelection ? `Update ${selectedOrders.size}` : 'Bulk Update Status';
+        bulkDeleteBtn.textContent = hasSelection ? `Delete ${selectedOrders.size}` : 'Delete Selected';
+      }
+
+      function bulkUpdateStatus(newStatus) {
+        const storedOrders = JSON.parse(localStorage.getItem('blackonn_orders') || '[]');
+        selectedOrders.forEach(orderId => {
+          const orderIdx = storedOrders.findIndex(o => o.id === orderId);
+          if (orderIdx !== -1) {
+            storedOrders[orderIdx].status = newStatus;
+          }
+        });
+        localStorage.setItem('blackonn_orders', JSON.stringify(storedOrders));
+        selectedOrders.clear();
+        updateBulkActionsState();
+        fetchOrders();
+        renderStats();
+      }
+
+      function bulkDeleteOrders() {
+        const storedOrders = JSON.parse(localStorage.getItem('blackonn_orders') || '[]');
+        const filtered = storedOrders.filter(o => !selectedOrders.has(o.id));
+        localStorage.setItem('blackonn_orders', JSON.stringify(filtered));
+        selectedOrders.clear();
+        updateBulkActionsState();
+        fetchOrders();
+        renderStats();
+      }
+
+      // Export functionality
+      function initializeExport() {
+        const exportBtn = document.getElementById('exportOrdersBtn');
+        exportBtn.addEventListener('click', exportOrdersToCSV);
+        
+        const exportReturnsBtn = document.getElementById('exportReturnsBtn');
+        if (exportReturnsBtn) {
+          exportReturnsBtn.addEventListener('click', exportReturnsToCSV);
+        }
+      }
+
+      function exportOrdersToCSV() {
+        if (!orders.length) {
+          alert('No orders to export');
+          return;
+        }
+
+        const csvContent = [
+          // Header
+          ['Order ID', 'Customer Name', 'Email', 'Phone', 'Total Amount', 'Status', 'Date', 'Items Count', 'Address'].join(','),
+          // Data
+          ...orders.map(order => [
+            order.id,
+            order.customer?.name || '',
+            order.customer?.email || '',
+            order.customer?.phone || '',
+            order.total || order.amount || 0,
+            order.status || 'Pending',
+            order.createdAt ? new Date(order.createdAt).toLocaleDateString() : '',
+            order.items?.length || 0,
+            `"${(order.address?.street || '') + ', ' + (order.address?.city || '') + ', ' + (order.address?.state || '')}"`
+          ].join(','))
+        ].join('\n');
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', `orders_export_${new Date().toISOString().split('T')[0]}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+
+      function exportReturnsToCSV() {
+        const returns = JSON.parse(localStorage.getItem('blackonn_returns') || '[]');
+        
+        if (!returns.length) {
+          alert('No returns to export');
+          return;
+        }
+
+        const csvContent = [
+          // Header
+          ['Return ID', 'Order ID', 'Customer Name', 'Email', 'Product', 'Reason', 'Status', 'Refund Amount', 'Date', 'Notes'].join(','),
+          // Data
+          ...returns.map(ret => [
+            ret.id || '',
+            ret.orderId || '',
+            ret.customerName || '',
+            ret.email || '',
+            `"${ret.productName || ''}"`,
+            ret.reason || '',
+            ret.status || 'Pending',
+            ret.refundAmount || 0,
+            ret.createdAt ? new Date(ret.createdAt).toLocaleDateString() : '',
+            `"${(ret.notes || '').replace(/"/g, '""')}"`
+          ].join(','))
+        ].join('\n');
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', `returns_export_${new Date().toISOString().split('T')[0]}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+
+      // Enhanced renderOrders to include checkboxes
+      function renderOrdersTable(ordersToRender = orders) {
+        if (!ordersToRender.length) {
+          ordersBody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:40px;color:#9ca3af;"><i class="ri-inbox-line" style="font-size:2rem;display:block;margin-bottom:8px;"></i>No orders found matching your filters</td></tr>';
+          return;
+        }
+
+        ordersBody.innerHTML = ordersToRender
+          .map(order => {
+            const dateStr = order.createdAt ? new Date(order.createdAt).toLocaleDateString() : '-';
+            const timeStr = order.createdAt ? new Date(order.createdAt).toLocaleTimeString() : '';
+
+            // Build items detail
+            const itemsHtml = order.items?.map(i =>
+              `<div class="item">${i.name || 'Product'} <small>(${i.size || '-'}/${i.color || '-'}) x${i.quantity || 1}</small></div>`
+            ).join('') || '<div class="item">-</div>';
+
+            // Build address
+            const addr = order.address || {};
+            const addressStr = [addr.street, addr.city, addr.state, addr.postal].filter(Boolean).join(', ') || '-';
+
+            return `
+              <tr class="${selectedOrders.has(order.id) ? 'selected' : ''}">
+                <td data-label="Select">
+                  <input type="checkbox" class="order-checkbox" data-id="${order.id}" ${selectedOrders.has(order.id) ? 'checked' : ''} />
+                </td>
+                <td data-label="Order #">
+                  <strong>${order.id}</strong>
+                  <div class="last-activity">${timeStr}</div>
+                </td>
+                <td data-label="Customer">
+                  <strong>${order.customer?.name || '-'}</strong>
+                  <div style="font-size:0.75rem;color:#6b7280;">${order.customer?.email || ''}</div>
+                  <div style="font-size:0.75rem;color:#9ca3af;">${order.customer?.phone || ''}</div>
+                </td>
+                <td data-label="Amount"><strong>₹${(order.total || order.amount || 0).toLocaleString()}</strong></td>
+                <td data-label="Date">${dateStr}</td>
+                <td data-label="Status">
+                  <select class="order-status" data-id="${order.id}">
+                    <option value="Pending" ${order.status === 'Pending' ? 'selected' : ''}>⏳ Pending</option>
+                    <option value="Processing" ${order.status === 'Processing' ? 'selected' : ''}>🔄 Processing</option>
+                    <option value="Shipped" ${order.status === 'Shipped' ? 'selected' : ''}>📦 Shipped</option>
+                    <option value="Delivered" ${order.status === 'Delivered' ? 'selected' : ''}>✅ Delivered</option>
+                    <option value="Cancelled" ${order.status === 'Cancelled' ? 'selected' : ''}>❌ Cancelled</option>
+                  </select>
+                </td>
+                <td data-label="Items">
+                  <div class="order-items-detail">${itemsHtml}</div>
+                </td>
+                <td data-label="Address">
+                  <div class="order-address" title="${addressStr}">${addressStr.length > 40 ? addressStr.slice(0, 40) + '...' : addressStr}</div>
+                </td>
+                <td data-label="Actions" class="actions">
+                  <button type="button" data-action="view-order" data-id="${order.id}" aria-label="View" title="View order details">
+                    <i class="ri-eye-line"></i>
+                  </button>
+                  <button type="button" data-action="delete-order" data-id="${order.id}" aria-label="Delete" title="Delete order">
+                    <i class="ri-delete-bin-6-line"></i>
+                  </button>
+                </td>
+              </tr>
+            `;
+          })
+          .join('');
+
+        // Attach event listeners
+        attachOrderEventListeners();
+      }
+
+      function attachOrderEventListeners() {
+        // Status change handlers
+        document.querySelectorAll('.order-status').forEach(select => {
+          select.addEventListener('change', (e) => {
+            const orderId = e.target.dataset.id;
+            const newStatus = e.target.value;
+            // Update order in localStorage
+            const storedOrders = JSON.parse(localStorage.getItem('blackonn_orders') || '[]');
+            const orderIdx = storedOrders.findIndex(o => o.id === orderId);
+            if (orderIdx !== -1) {
+              storedOrders[orderIdx].status = newStatus;
+              localStorage.setItem('blackonn_orders', JSON.stringify(storedOrders));
+              orders = storedOrders;
+              renderStats();
+            }
+          });
+        });
+
+        // Checkbox handlers
+        document.querySelectorAll('.order-checkbox').forEach(cb => {
+          cb.addEventListener('change', (e) => {
+            updateOrderSelection(e.target.dataset.id, e.target.checked);
+            // Update select all checkbox
+            const allCheckboxes = document.querySelectorAll('.order-checkbox');
+            const checkedBoxes = document.querySelectorAll('.order-checkbox:checked');
+            document.getElementById('selectAllOrders').checked = allCheckboxes.length === checkedBoxes.length;
+          });
+        });
+
+        // Action handlers
+        document.querySelectorAll('[data-action="view-order"]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const orderId = btn.dataset.id;
+            const order = orders.find(o => o.id === orderId);
+            if (order) {
+              const details = `
+Order ID: ${order.id}
+Status: ${order.status}
+Date: ${order.createdAt ? new Date(order.createdAt).toLocaleString() : '-'}
+
+Customer:
+  Name: ${order.customer?.name || '-'}
+  Email: ${order.customer?.email || '-'}
+  Phone: ${order.customer?.phone || '-'}
+
+Items:
+${order.items?.map(i => `  - ${i.name} (${i.size}/${i.color}) x${i.quantity} = ₹${(i.price * i.quantity).toLocaleString()}`).join('\n') || '  No items'}
+
+Address:
+  ${order.address?.street || '-'}
+  ${order.address?.city || ''} ${order.address?.state || ''} ${order.address?.postal || ''}
+
+Amount: ₹${(order.amount || 0).toLocaleString()}
+Payment: ${order.paymentMethod || 'COD'} ${order.paymentStatus === 'paid' ? '(Paid)' : '(Pending)'}
+              `;
+              showModal('Order Details', `<pre style="white-space: pre-wrap; font-family: inherit; margin: 0;">${details}</pre>`);
+            }
+          });
+        });
+
+        document.querySelectorAll('[data-action="delete-order"]').forEach(btn => {
+          btn.addEventListener('click', async () => {
+            const orderId = btn.dataset.id;
+            showModal(
+              'Delete Order',
+              `Are you sure you want to delete order ${orderId}? This action cannot be undone.`,
+              () => {
+                // Delete from localStorage
+                const storedOrders = JSON.parse(localStorage.getItem('blackonn_orders') || '[]');
+                const filtered = storedOrders.filter(o => o.id !== orderId);
+                localStorage.setItem('blackonn_orders', JSON.stringify(filtered));
+                closeModal();
+                fetchOrders();
+                renderStats();
+              }
+            );
+          });
+        });
+      }
+
+      // Utility functions
+      function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+          const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+          };
+          clearTimeout(timeout);
+          timeout = setTimeout(later, wait);
+        };
+      }
+
+      function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      function showSection(sectionId) {
+        const section = document.getElementById(sectionId);
+        if (section) {
+          section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+
+      // Product search and filters
+      let productFilters = {
+        search: '',
+        category: ''
+      };
+
+      function initializeProductSearch() {
+        const searchInput = document.getElementById('productSearch');
+        const clearSearchBtn = document.getElementById('clearProductSearch');
+        const categoryFilter = document.getElementById('productCategoryFilter');
+
+        searchInput.addEventListener('input', debounce(() => {
+          productFilters.search = searchInput.value.toLowerCase();
+          renderFilteredProducts();
+        }, 300));
+
+        clearSearchBtn.addEventListener('click', () => {
+          searchInput.value = '';
+          productFilters.search = '';
+          renderFilteredProducts();
+        });
+
+        categoryFilter.addEventListener('change', () => {
+          productFilters.category = categoryFilter.value;
+          renderFilteredProducts();
+        });
+      }
+
+      function renderFilteredProducts() {
+        const filteredProducts = products.filter(product => {
+          // Search filter
+          if (productFilters.search) {
+            const searchTerm = productFilters.search;
+            const matchesSearch =
+              product.name.toLowerCase().includes(searchTerm) ||
+              product.description.toLowerCase().includes(searchTerm) ||
+              product.category.toLowerCase().includes(searchTerm);
+            if (!matchesSearch) return false;
+          }
+
+          // Category filter
+          if (productFilters.category && product.category !== productFilters.category) {
+            return false;
+          }
+
+          return true;
+        });
+
+        renderProductsTable(filteredProducts);
+      }
+
+      // Enhanced renderProducts to include checkboxes for bulk actions
+      function renderProductsTable(productsToRender = products) {
+        if (!productsToRender.length) {
+          productsBody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:40px;color:#9ca3af;"><i class="ri-inbox-line" style="font-size:2rem;display:block;margin-bottom:8px;"></i>No products found matching your filters</td></tr>';
+          return;
+        }
+
+        productsBody.innerHTML = productsToRender
+          .map(product => `
+            <tr>
+              <td data-label="Select">
+                <input type="checkbox" class="product-checkbox" data-id="${product.id}" />
+              </td>
+              <td data-label="Image">
+                <img src="${product.image || 'assets/img/placeholder.jpg'}" alt="${product.name}" style="width:50px;height:50px;object-fit:cover;border-radius:6px;" />
+              </td>
+              <td data-label="Name">
+                <strong>${product.name}</strong>
+                <div style="font-size:0.75rem;color:#6b7280;max-width:200px;overflow:hidden;text-overflow:ellipsis;">${product.description || ''}</div>
+              </td>
+              <td data-label="Category">${product.category || '-'}</td>
+              <td data-label="Price">₹${product.price.toLocaleString()}</td>
+              <td data-label="Stock">${product.stock || 0}</td>
+              <td data-label="Actions" class="actions">
+                <button type="button" data-action="edit-product" data-id="${product.id}" aria-label="Edit" title="Edit product">
+                  <i class="ri-edit-line"></i>
+                </button>
+                <button type="button" data-action="delete-product" data-id="${product.id}" aria-label="Delete" title="Delete product">
+                  <i class="ri-delete-bin-6-line"></i>
+                </button>
+              </td>
+            </tr>
+          `)
+          .join('');
+
+        // Attach event listeners
+        attachProductEventListeners();
+      }
+
+      function attachProductEventListeners() {
+        document.querySelectorAll('[data-action="edit-product"]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const productId = btn.dataset.id;
+            const product = products.find(p => p.id === productId);
+            if (product) {
+              // Populate edit form
+              document.getElementById('productName').value = product.name;
+              document.getElementById('productDescription').value = product.description || '';
+              document.getElementById('productPrice').value = product.price;
+              document.getElementById('productCategory').value = product.category || '';
+              document.getElementById('productStock').value = product.stock || 0;
+              document.getElementById('productImage').value = product.image || '';
+
+              // Change form to edit mode
+              const form = document.getElementById('productForm');
+              form.dataset.mode = 'edit';
+              form.dataset.editId = productId;
+
+              document.getElementById('productFormTitle').textContent = 'Edit Product';
+              document.getElementById('productSubmitBtn').textContent = 'Update Product';
+
+              showSection('products');
+              document.getElementById('productName').focus();
+            }
+          });
+        });
+
+        document.querySelectorAll('[data-action="delete-product"]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const productId = btn.dataset.id;
+            showModal(
+              'Delete Product',
+              `Are you sure you want to delete "${products.find(p => p.id === productId)?.name}"? This action cannot be undone.`,
+              () => {
+                // Delete from localStorage
+                const storedProducts = JSON.parse(localStorage.getItem('blackonn_products') || '[]');
+                const filtered = storedProducts.filter(p => p.id !== productId);
+                localStorage.setItem('blackonn_products', JSON.stringify(filtered));
+                closeModal();
+                fetchProducts();
+                renderStats();
+              }
+            );
+          });
+        });
+      }
+
+      // Enhanced product form submission
+      document.getElementById('productForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+        const productData = {
+          name: formData.get('name'),
+          description: formData.get('description'),
+          price: parseFloat(formData.get('price')),
+          category: formData.get('category'),
+          stock: parseInt(formData.get('stock')) || 0,
+          image: formData.get('image') || 'assets/img/placeholder.jpg'
+        };
+
+        const isEdit = this.dataset.mode === 'edit';
+        const editId = this.dataset.editId;
+
+        if (isEdit) {
+          // Update existing product
+          const storedProducts = JSON.parse(localStorage.getItem('blackonn_products') || '[]');
+          const productIdx = storedProducts.findIndex(p => p.id === editId);
+          if (productIdx !== -1) {
+            storedProducts[productIdx] = { ...storedProducts[productIdx], ...productData };
+            localStorage.setItem('blackonn_products', JSON.stringify(storedProducts));
+          }
+        } else {
+          // Add new product
+          const newProduct = {
+            id: 'prod_' + Date.now(),
+            ...productData,
+            createdAt: new Date().toISOString()
+          };
+
+          const storedProducts = JSON.parse(localStorage.getItem('blackonn_products') || '[]');
+          storedProducts.push(newProduct);
+          localStorage.setItem('blackonn_products', JSON.stringify(storedProducts));
+        }
+
+        // Reset form
+        this.reset();
+        this.dataset.mode = '';
+        this.dataset.editId = '';
+        document.getElementById('productFormTitle').textContent = 'Add New Product';
+        document.getElementById('productSubmitBtn').textContent = 'Add Product';
+
+        fetchProducts();
+        renderStats();
+
+        // Show success message
+        showModal('Success', `${isEdit ? 'Product updated' : 'Product added'} successfully!`);
+        setTimeout(() => closeModal(), 2000);
+      });
+
+
+
+      // Initialize product search when DOM loads
+      document.addEventListener('DOMContentLoaded', () => {
+        initializeProductSearch();
+        initializeSearchAndFilters();
+        initializeBulkActions();
+        initializeExport();
+
+        // Initialize user filters and search
+        const userRoleFilter = document.getElementById('userRoleFilter');
+        const userSortBy = document.getElementById('userSortBy');
+        const userSearch = document.getElementById('userSearch');
+        const clearUserSearch = document.getElementById('clearUserSearch');
+
+        if (userRoleFilter) {
+          userRoleFilter.addEventListener('change', renderUsers);
+        }
+        if (userSortBy) {
+          userSortBy.addEventListener('change', renderUsers);
+        }
+        if (userSearch) {
+          userSearch.addEventListener('input', debounce(() => {
+            renderUsers();
+          }, 300));
+        }
+        if (clearUserSearch) {
+          clearUserSearch.addEventListener('click', () => {
+            if (userSearch) userSearch.value = '';
+            renderUsers();
+          });
+        }
+
+        // Initialize returns search and filters
+        initializeReturnsSearchAndFilters();
+
+        // Initialize messages management
+        initializeMessagesManagement();
+      });
+
+      // ===============================
+      // MESSAGES MANAGEMENT FUNCTIONS
+      // ===============================
+
+      function initializeMessagesManagement() {
+        loadAndRenderMessages();
+        updateMessageNotificationBadge();
+
+        const refreshMessagesBtn = document.getElementById('refreshMessagesBtn');
+        if (refreshMessagesBtn) {
+          refreshMessagesBtn.addEventListener('click', () => {
+            loadAndRenderMessages();
+            updateMessageNotificationBadge();
+          });
+        }
+
+        // Auto-refresh message notification badge every 5 seconds
+        setInterval(updateMessageNotificationBadge, 5000);
+      }
+
+      function updateMessageNotificationBadge() {
+        try {
+          const messages = JSON.parse(localStorage.getItem('blackonn_contact_messages') || '[]');
+          const unreadMessages = messages.filter(msg => msg.status === 'unread');
+          const badge = document.getElementById('messagesNotificationBadge');
+          
+          if (!badge) return;
+
+          if (unreadMessages.length > 0) {
+            // Add notification dot with count
+            let dot = badge.querySelector('.notification-dot');
+            if (!dot) {
+              dot = document.createElement('span');
+              dot.className = 'notification-dot';
+              badge.appendChild(dot);
+            }
+            dot.textContent = unreadMessages.length > 9 ? '9+' : unreadMessages.length;
+            badge.classList.add('has-notification');
+          } else {
+            // Remove notification dot
+            const dot = badge.querySelector('.notification-dot');
+            if (dot) dot.remove();
+            badge.classList.remove('has-notification');
+          }
+        } catch (error) {
+          console.error('Error updating notification badge:', error);
+        }
+      }
+
+      function loadAndRenderMessages() {
+        try {
+          const messages = localStorage.getItem('blackonn_contact_messages');
+          const messagesData = messages ? JSON.parse(messages) : [];
+
+          console.log('Loaded messages:', messagesData);
+          renderMessages(messagesData);
+        } catch (error) {
+          console.error('Error loading messages:', error);
+          const tbody = document.getElementById('messagesTableBody');
+          if (tbody) {
+            tbody.innerHTML = '';
+          }
+        }
+      }
+
+      function renderMessages(messages) {
+        const tbody = document.getElementById('messagesTableBody');
+        const noMessagesMsg = document.getElementById('noMessagesMsg');
+
+        if (!tbody) return;
+
+        if (!messages || messages.length === 0) {
+          tbody.innerHTML = '';
+          if (noMessagesMsg) noMessagesMsg.style.display = 'block';
+          return;
+        }
+
+        if (noMessagesMsg) noMessagesMsg.style.display = 'none';
+
+        // Sort messages by date (newest first)
+        const sortedMessages = [...messages].sort((a, b) => {
+          return new Date(b.timestamp) - new Date(a.timestamp);
+        });
+
+        tbody.innerHTML = sortedMessages.map(msg => {
+          const date = new Date(msg.timestamp).toLocaleString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          });
+
+          const statusClass = msg.status === 'read' ? 'status-read' : 'status-unread';
+
+          return `
+            <tr class="${statusClass}">
+              <td><strong>${msg.name || 'N/A'}</strong></td>
+              <td>${msg.email || 'N/A'}</td>
+              <td>${msg.phone || 'N/A'}</td>
+              <td>${msg.subject || 'No Subject'}</td>
+              <td><small>${date}</small></td>
+              <td>
+                <span class="status-badge ${msg.status === 'read' ? 'badge-success' : 'badge-warning'}">
+                  ${msg.status === 'read' ? 'Read' : 'Unread'}
+                </span>
+              </td>
+              <td>
+                <div class="action-buttons">
+                  <button class="action-btn view-msg-btn" onclick="viewMessage('${msg.id}')">
+                    <i class="ri-eye-line"></i> View
+                  </button>
+                  <button class="action-btn delete-msg-btn" onclick="deleteMessage('${msg.id}')">
+                    <i class="ri-delete-bin-line"></i> Delete
+                  </button>
+                </div>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      function viewMessage(msgId) {
+        try {
+          const messages = JSON.parse(localStorage.getItem('blackonn_contact_messages') || '[]');
+          const message = messages.find(m => m.id === msgId);
+
+          if (!message) {
+            alert('Message not found');
+            return;
+          }
+
+          // Mark as read
+          if (message.status !== 'read') {
+            message.status = 'read';
+            localStorage.setItem('blackonn_contact_messages', JSON.stringify(messages));
+            loadAndRenderMessages();
+          }
+
+          // Initialize replies array if not exists
+          if (!message.replies) {
+            message.replies = [];
+          }
+
+          // Show modal with message details
+          const modal = document.createElement('div');
+          modal.className = 'modal-overlay';
+          
+          let repliesHTML = '';
+          if (message.replies && message.replies.length > 0) {
+            repliesHTML = `
+              <div class="replies-section">
+                <h4><i class="ri-reply-line"></i> Admin Replies</h4>
+                <div class="replies-list">
+                  ${message.replies.map(reply => `
+                    <div class="reply-item">
+                      <div class="reply-header">
+                        <strong>Admin Response</strong>
+                        <small>${new Date(reply.timestamp).toLocaleString()}</small>
+                      </div>
+                      <p class="reply-content">${reply.text}</p>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            `;
+          }
+
+          modal.innerHTML = `
+            <div class="modal-content" style="max-height: 90vh; overflow-y: auto;">
+              <div class="modal-header">
+                <h3>Message Details</h3>
+                <button class="close-modal-btn" onclick="this.closest('.modal-overlay').remove()">
+                  <i class="ri-close-line"></i>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="message-detail">
+                  <div class="detail-row">
+                    <label>Name:</label>
+                    <p>${message.name || 'N/A'}</p>
+                  </div>
+                  <div class="detail-row">
+                    <label>Email:</label>
+                    <p><a href="mailto:${message.email}">${message.email || 'N/A'}</a></p>
+                  </div>
+                  <div class="detail-row">
+                    <label>Phone:</label>
+                    <p><a href="tel:${message.phone}">${message.phone || 'N/A'}</a></p>
+                  </div>
+                  <div class="detail-row">
+                    <label>Subject:</label>
+                    <p>${message.subject || 'No Subject'}</p>
+                  </div>
+                  <div class="detail-row">
+                    <label>Date:</label>
+                    <p>${new Date(message.timestamp).toLocaleString()}</p>
+                  </div>
+                  <div class="detail-row full-width">
+                    <label>Message:</label>
+                    <p class="message-content">${message.message || 'No content'}</p>
+                  </div>
+                </div>
+                ${repliesHTML}
+                <div class="reply-form-section">
+                  <h4><i class="ri-edit-line"></i> Add Reply</h4>
+                  <textarea id="replyText" class="reply-textarea" placeholder="Type your reply to the customer..."></textarea>
+                  <div style="margin-top: 12px; display: flex; gap: 8px;">
+                    <button type="button" class="secondary" onclick="this.closest('.modal-overlay').remove()">Cancel</button>
+                    <button type="button" class="primary" onclick="saveMessageReply('${msgId}')"><i class="ri-send-plane-line"></i> Send Reply</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+
+          document.body.appendChild(modal);
+        } catch (error) {
+          console.error('Error viewing message:', error);
+          alert('Error opening message');
+        }
+      }
+
+      function saveMessageReply(msgId) {
+        try {
+          const replyText = document.getElementById('replyText').value.trim();
+          
+          if (!replyText) {
+            alert('Please type a reply');
+            return;
+          }
+
+          const messages = JSON.parse(localStorage.getItem('blackonn_contact_messages') || '[]');
+          const message = messages.find(m => m.id === msgId);
+
+          if (!message) {
+            alert('Message not found');
+            return;
+          }
+
+          // Initialize replies array if not exists
+          if (!message.replies) {
+            message.replies = [];
+          }
+
+          // Add new reply
+          message.replies.push({
+            id: 'reply_' + Date.now(),
+            text: replyText,
+            timestamp: new Date().toISOString(),
+            status: 'new'
+          });
+
+          // Save updated messages
+          localStorage.setItem('blackonn_contact_messages', JSON.stringify(messages));
+          
+          alert('Reply sent successfully!');
+          document.querySelector('.modal-overlay').remove();
+          viewMessage(msgId); // Reopen modal to show the new reply
+        } catch (error) {
+          console.error('Error saving reply:', error);
+          alert('Error sending reply');
+        }
+      }
+
+      function deleteMessage(msgId) {
+        if (!confirm('Are you sure you want to delete this message?')) return;
+
+        try {
+          let messages = JSON.parse(localStorage.getItem('blackonn_contact_messages') || '[]');
+          messages = messages.filter(m => m.id !== msgId);
+          localStorage.setItem('blackonn_contact_messages', JSON.stringify(messages));
+          loadAndRenderMessages();
+          alert('Message deleted successfully');
+        } catch (error) {
+          console.error('Error deleting message:', error);
+          alert('Error deleting message');
+        }
+      }
+
+      function copyMessageToClipboard(msgId) {
+        try {
+          const messages = JSON.parse(localStorage.getItem('blackonn_contact_messages') || '[]');
+          const message = messages.find(m => m.id === msgId);
+
+          if (!message) return;
+
+          const textToCopy = `Name: ${message.name}
+Email: ${message.email}
+Phone: ${message.phone}
+Subject: ${message.subject}
+Date: ${new Date(message.timestamp).toLocaleString()}
+
+Message:
+${message.message}`;
+
+          navigator.clipboard.writeText(textToCopy).then(() => {
+            alert('Message copied to clipboard');
+          }).catch(() => {
+            // Fallback method
+            const textarea = document.createElement('textarea');
+            textarea.value = textToCopy;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            alert('Message copied to clipboard');
+          });
+        } catch (error) {
+          console.error('Error copying message:', error);
+        }
+      }
+
+      // Keyboard shortcuts
+      document.addEventListener('keydown', (e) => {
+        // Ctrl/Cmd + K to focus search
+        if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+          e.preventDefault();
+          document.getElementById('orderSearch')?.focus();
+        }
+        // Ctrl/Cmd + R to refresh orders
+        if ((e.ctrlKey || e.metaKey) && e.key === 'r') {
+          e.preventDefault();
+          fetchOrders();
+        }
+        // Escape to close modal
+        if (e.key === 'Escape') {
+          closeModal();
+        }
+      });
+    </script>
+  </body>
+</html>

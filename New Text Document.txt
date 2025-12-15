@@ -1,0 +1,297 @@
+<style>
+:root{
+  --page-bg:#f2f6fa;
+  --card-bg:#fff;
+  --muted:#6b7280;
+  --accent:#0b0b0b;
+  --glass:rgba(255,255,255,0.34);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
+  background:linear-gradient(180deg,var(--page-bg),#eef3f8 160px);
+  color:#0b0b0b;
+  -webkit-font-smoothing:antialiased;
+  padding:36px;
+}
+
+/* GRID */
+.grid {
+  max-width:1400px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:48px;
+  justify-items:center;
+}
+
+/* CARD (5in x 7in -> 480 x 672 px) */
+.card {
+  width:480px;
+  height:672px;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+  background:var(--card-bg);
+  border-radius:20px;
+  padding:18px;
+  box-shadow:0 18px 50px rgba(8,12,20,0.08);
+  transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s;
+  transform:translateY(28px);
+  opacity:0;
+  animation:enter .7s cubic-bezier(.16,1,.3,1) forwards;
+}
+@keyframes enter{from{transform:translateY(28px);opacity:0}to{transform:translateY(0);opacity:1}}
+.card .visual{ width:100%; height:60%; border-radius:14px; overflow:hidden; background:#eee }
+.card .visual img{ width:100%; height:100%; object-fit:cover; transition:transform .45s ease }
+.card:hover{ transform:translateY(-8px); box-shadow:0 26px 60px rgba(8,12,20,0.12) }
+.card:hover .visual img{ transform:scale(1.04) }
+
+.meta{ flex:1; display:flex; flex-direction:column; padding:6px 4px }
+.meta h3{ margin:6px 0 8px 0; font-size:22px }
+.meta p{ margin:0; color:var(--muted); font-size:15px; line-height:1.3 }
+
+/* Buttons row inside card */
+.card-actions{ margin-top:auto; display:flex; justify-content:center }
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; padding:12px 20px; border-radius:12px;
+  font-weight:600; text-decoration:none; font-size:15px; cursor:pointer; border:1px solid rgba(0,0,0,0.06);
+  background:transparent; color:var(--accent);
+}
+.btn:hover{ transform:translateY(-3px); box-shadow:0 8px 20px rgba(2,6,23,0.06) }
+
+/* Zigzag */
+.pos-right{ grid-column:2 }
+.pos-left{ grid-column:1 }
+
+/* Modal / Backdrop */
+.backdrop{
+  position:fixed; inset:0; display:none; align-items:center; justify-content:center;
+  background:rgba(6,8,12,0.62); z-index:9999; backdrop-filter:blur(8px) saturate(110%); padding:20px;
+}
+.modal{
+  width:100%; max-width:1040px; border-radius:22px; background:var(--glass);
+  border:1px solid rgba(255,255,255,0.45); box-shadow:0 28px 80px rgba(7,11,18,0.42);
+  display:grid; grid-template-columns:220px 1fr; gap:20px; padding:22px; position:relative;
+  transform:scale(.98); opacity:0; animation:modalIn .36s cubic-bezier(.2,.9,.3,1) forwards;
+}
+@keyframes modalIn{ to{ transform:scale(1); opacity:1 } }
+
+.closeBtn{ position:absolute; right:12px; top:12px; background:rgba(0,0,0,0.85); color:#fff; border-radius:999px; width:40px; height:40px; border:0; display:flex; align-items:center; justify-content:center; font-size:18px; cursor:pointer }
+
+.thumbs{ display:flex; flex-direction:column; gap:12px; align-items:flex-start }
+.thumbs img{ width:72px; height:72px; object-fit:cover; border-radius:10px; cursor:pointer; border:2px solid transparent; transition:all .18s }
+.thumbs img.active{ border-color:rgba(2,6,23,0.95); transform:scale(1.04) }
+
+.productTitle{ font-weight:700; font-size:20px; margin-top:6px }
+.productDesc{ color:var(--muted); margin-top:6px; font-size:14px }
+
+.label{ margin-top:10px; font-size:13px; font-weight:600; color:#111 }
+.sizes,.colors{ display:flex; gap:10px; margin-top:8px; flex-wrap:wrap; align-items:center }
+
+.chipLabel{
+  padding:8px 12px; border-radius:999px; border:1px solid rgba(0,0,0,0.12); cursor:pointer;
+  font-size:13px; transition:all .18s; background:rgba(255,255,255,0.6)
+}
+.chipLabel:hover{ transform:translateY(-3px) }
+.chipLabel.selected{ background:#0b0b0b; color:#fff; border-color:transparent }
+
+.colorDot{ width:28px; height:28px; border-radius:50%; border:1px solid rgba(0,0,0,0.14); cursor:pointer; transition:transform .14s, box-shadow .14s }
+.colorDot.selected{ transform:scale(1.08); box-shadow:0 10px 20px rgba(2,6,23,0.18); border-color:transparent }
+
+.buyLarge{ display:inline-block; margin-top:14px; padding:11px 22px; border-radius:12px; background:var(--accent); color:#fff; text-decoration:none; font-weight:700; box-shadow:0 12px 36px rgba(0,0,0,0.2) }
+.buyLarge:hover{ transform:translateY(-4px) }
+
+.mainWrap{ display:flex; align-items:center; justify-content:center; padding:6px }
+.mainImage{ width:100%; height:540px; object-fit:cover; border-radius:14px; transition:transform .5s ease }
+.mainImage:hover{ transform:scale(1.04) }
+
+/* responsive */
+@media (max-width:980px){
+  .grid{ grid-template-columns:1fr; gap:20px }
+  .card{ width:90%; height:auto; flex-direction:row; gap:14px }
+  .card .visual{ width:38%; height:180px }
+  .card .visual img{ height:100% }
+  .modal{ grid-template-columns:1fr; padding:16px; max-height:92vh; overflow:auto }
+  .thumbs{ flex-direction:row; order:2; overflow:auto; padding-bottom:6px }
+  .thumbs img{ margin-right:8px }
+  .mainImage{ height:360px }
+}
+@media (max-width:520px){
+  body{ padding:18px }
+  .card .visual{ width:40%; height:140px }
+  .meta h3{ font-size:18px }
+}
+</style>
+</head>
+<body>
+
+<div class="grid" id="gridRoot"></div>
+
+<!-- Modal -->
+<div class="backdrop" id="backdrop" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true">
+    <button class="closeBtn" id="closeBtn" aria-label="Close modal">✕</button>
+
+    <div>
+      <div class="thumbs" id="thumbsCol"></div>
+
+      <div class="productTitle" id="prodTitle">Product name</div>
+      <div class="productDesc" id="prodDesc">Short product description</div>
+
+      <div class="label">Size</div>
+      <div class="sizes" id="sizesRow"></div>
+
+      <div class="label">Color</div>
+      <div class="colors" id="colorsRow"></div>
+
+      <a id="buyNow" class="buyLarge" target="_blank" rel="noopener">Buy on WhatsApp</a>
+    </div>
+
+    <div class="mainWrap">
+      <img id="mainImg" class="mainImage" alt="Product image" src="" />
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* ---------- data ---------- */
+/* Replace wa values with your WhatsApp number in format: https://wa.me/9198XXXXXXXX */
+const products = [
+  { name:"Premium Jacket", desc:"Ultra-luxury windproof jacket with premium stitching.", wa:"https://wa.me/919876543210", pos:"pos-right", sizes:["S","M","L","XL"], colors:["#000","#4b5563","#b22222","#0077cc"], images:["https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=1400&q=80&auto=format&fit=crop","https://images.unsplash.com/photo-1530845647526-5f7f338b1a84?w=1400&q=80&auto=format&fit=crop","https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=1400&q=80&auto=format&fit=crop"] },
+  { name:"Classic Hoodie", desc:"Soft fleece, winter-ready, ultra-comfortable.", wa:"https://wa.me/919876543210", pos:"pos-left", sizes:["S","M","L","XL"], colors:["#000","#6b7280","#2f855a","#b22222"], images:["https://images.unsplash.com/photo-1543076447-215ad9ba6923?w=1400&q=80&auto=format&fit=crop","https://images.unsplash.com/photo-1530099486328-e021101a494a?w=1400&q=80&auto=format&fit=crop","https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=1400&q=80&auto=format&fit=crop"] },
+  { name:"Urban T-Shirt", desc:"Minimalist design with a street premium fit.", wa:"https://wa.me/919876543210", pos:"pos-right", sizes:["S","M","L","XL"], colors:["#000","#666","#c04a4a","#0b85c9"], images:["https://images.unsplash.com/photo-1520975916341-6f2c2b7a48d7?w=1400&q=80&auto=format&fit=crop","https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=1400&q=80&auto=format&fit=crop","https://images.unsplash.com/photo-1539533113208-f6df8cc8b543?w=1400&q=80&auto=format&fit=crop"] },
+  { name:"Tailored Coat", desc:"Sculpted fit with timeless tailoring and comfort.", wa:"https://wa.me/919876543210", pos:"pos-left", sizes:["S","M","L","XL"], colors:["#111","#4b5563","#8b5e3c","#0b85c9"], images:["https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=1400&q=80&auto=format&fit=crop","https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=1400&q=80&auto=format&fit=crop","https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=1400&q=80&auto=format&fit=crop"] },
+  { name:"Street Bomber", desc:"Edgy bomber with premium lining and hardware.", wa:"https://wa.me/919876543210", pos:"pos-right", sizes:["S","M","L","XL"], colors:["#000","#374151","#b22222","#0b85c9"], images:["https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=1400&q=80&auto=format&fit=crop","https://images.unsplash.com/photo-1530845647526-5f7f338b1a84?w=1400&q=80&auto=format&fit=crop","https://images.unsplash.com/photo-1543076447-215ad9ba6923?w=1400&q=80&auto=format&fit=crop"] },
+  { name:"Minimal Polo", desc:"Clean silhouette with breathable fabric, everyday luxury.", wa:"https://wa.me/919876543210", pos:"pos-left", sizes:["S","M","L","XL"], colors:["#000","#6b7280","#9b5de5","#0b85c9"], images:["https://images.unsplash.com/photo-1520975916341-6f2c2b7a48d7?w=1400&q=80&auto=format&fit=crop","https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=1400&q=80&auto=format&fit=crop","https://images.unsplash.com/photo-1530099486328-e021101a494a?w=1400&q=80&auto=format&fit=crop"] }
+];
+
+/* ---------- build grid ---------- */
+const gridRoot = document.getElementById('gridRoot');
+gridRoot.innerHTML = products.map((p, idx) => {
+  return `
+    <div class="card ${p.pos}" data-index="${idx}">
+      <div class="visual"><img src="${p.images[0]}" alt="${escapeHtml(p.name)}"></div>
+      <div class="meta">
+        <h3>${escapeHtml(p.name)}</h3>
+        <p>${escapeHtml(p.desc)}</p>
+        <div class="card-actions">
+          <button class="btn ghost btnShow" data-index="${idx}">Show More</button>
+        </div>
+      </div>
+    </div>`;
+}).join('');
+
+/* ---------- modal elements ---------- */
+const backdrop = document.getElementById('backdrop');
+const prodTitle = document.getElementById('prodTitle');
+const prodDesc = document.getElementById('prodDesc');
+const thumbsCol = document.getElementById('thumbsCol');
+const mainImg = document.getElementById('mainImg');
+const sizesRow = document.getElementById('sizesRow');
+const colorsRow = document.getElementById('colorsRow');
+const buyNow = document.getElementById('buyNow');
+const closeBtn = document.getElementById('closeBtn');
+
+let currentProductIndex = null;
+let currentSize = null;
+let currentColor = null;
+
+/* attach show-more click listeners */
+document.querySelectorAll('.btnShow').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    const idx = Number(btn.dataset.index);
+    openModal(idx);
+  });
+});
+
+function openModal(index){
+  currentProductIndex = index;
+  const p = products[index];
+  prodTitle.textContent = p.name;
+  prodDesc.textContent = p.desc;
+  mainImg.src = p.images[0];
+  buyNow.href = p.wa;
+  buyNow.setAttribute('aria-label', `Buy ${p.name} on WhatsApp`);
+
+  // thumbnails
+  thumbsCol.innerHTML = '';
+  p.images.forEach((src,i)=>{
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = `${p.name} thumb ${i+1}`;
+    if(i===0) img.classList.add('active');
+    img.addEventListener('click', ()=> {
+      mainImg.src = src;
+      thumbsCol.querySelectorAll('img').forEach(x=>x.classList.remove('active'));
+      img.classList.add('active');
+    });
+    thumbsCol.appendChild(img);
+  });
+
+  // sizes chips
+  sizesRow.innerHTML = '';
+  p.sizes.forEach((s,i)=>{
+    const label = document.createElement('div');
+    label.className = 'chipLabel';
+    label.textContent = s;
+    label.dataset.value = s;
+    label.addEventListener('click', ()=> {
+      sizesRow.querySelectorAll('.chipLabel').forEach(x=>x.classList.remove('selected'));
+      label.classList.add('selected');
+      currentSize = s;
+    });
+    sizesRow.appendChild(label);
+    if(i===0){ label.classList.add('selected'); currentSize = s; }
+  });
+
+  // colors
+  colorsRow.innerHTML = '';
+  p.colors.forEach((c,i)=>{
+    const dot = document.createElement('div');
+    dot.className = 'colorDot';
+    dot.style.background = c;
+    dot.dataset.value = c;
+    dot.addEventListener('click', ()=> {
+      colorsRow.querySelectorAll('.colorDot').forEach(x=>x.classList.remove('selected'));
+      dot.classList.add('selected');
+      currentColor = c;
+    });
+    colorsRow.appendChild(dot);
+    if(i===0){ dot.classList.add('selected'); currentColor = c; }
+  });
+
+  // show modal
+  backdrop.style.display = 'flex';
+  backdrop.setAttribute('aria-hidden','false');
+  setTimeout(()=> window.addEventListener('keydown', escHandler), 80);
+}
+
+function escHandler(e){ if(e.key === 'Escape') closeModal(); }
+function closeModal(){ backdrop.style.display = 'none'; backdrop.setAttribute('aria-hidden','true'); window.removeEventListener('keydown', escHandler); }
+
+/* close handlers */
+closeBtn.addEventListener('click', closeModal);
+backdrop.addEventListener('click', (ev)=> { if(ev.target === backdrop) closeModal(); });
+
+/* Buy button: append size/color info into WhatsApp text param */
+buyNow.addEventListener('click', function(e){
+  if(currentProductIndex === null) return;
+  const p = products[currentProductIndex];
+  const sizeText = currentSize ? `Size: ${currentSize}` : '';
+  const colorText = currentColor ? `Color: ${currentColor}` : '';
+  const message = encodeURIComponent(`Hi, I'm interested in ${p.name}.\n${sizeText}\n${colorText}`);
+  if(buyNow.href && buyNow.href.includes('wa.me')){
+    const sep = buyNow.href.includes('?') ? '&' : '?';
+    // open in new tab (link has target _blank) so we can update href
+    buyNow.href = p.wa + sep + 'text=' + message;
+  }
+});
+
+/* small utility */
+function escapeHtml(str){
+  return String(str).replace(/[&<>"']/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]; });
+}
+</script>
